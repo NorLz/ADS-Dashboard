@@ -3,17 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.19.0/plotly.min.js"></script>
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen">
         {% include 'sidebar.html' %}
         <div class="flex-grow">
-            <h1 class="text-center text-3xl mt-10">Welcome to the Dashboard</h1>
+            <div class="container mx-auto mt-10">
+                <h2 class="text-2xl font-bold mb-5">Upload CSV File for Prediction</h2>
+                <form action="/location" method="POST" enctype="multipart/form-data">
+                    <label for="file" class="block text-lg mb-2">Select a CSV File:</label>
+                    <input type="file" id="file" name="file" class="block w-full mb-5">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Upload and Predict</button>
+                </form>
+                
+                {% if graph_html %}
+                    <h3 class="text-xl font-bold mt-10">Predictions</h3>
+                    <div id="graph-container">
+                        {{ graph_html|safe }}
+                    </div>
+                {% endif %}
+
+                <h3 class="text-xl font-bold mt-10">City Map</h3>
+                <div id="map" style="height: 600px; width: 100%; margin-top: 20px;"></div>
+            </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cityNameMap = {
+                "City of Davao": "Davao City",
+                "City of Dagupan": "Dagupan City",
+                "City of Palayan": "Palayan City",
+                "City of Legazpi": "Legazpi City",
+                "City of Iloilo": "Iloilo City",
+                "City of Mandaue": "Mandaue City",
+                "City of Tacloban": "Tacloban City",
+                "City of Zamboanga": "Zamboanga City",
+                "City of Cagayan de Oro": "Cagayan de Oro City",
+                "City of Mandaluyong": "Mandaluyong City",
+                "City of Navotas": "Navotas City",
+                "City of Muntinlupa": "Muntinlupa City",
+            };
+    
+            const map = L.map('map').setView([12.8797, 121.7740], 6);
+    
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.carto.com/">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+    
+            fetch('/geojson/cities')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("GeoJSON data:", data);
+                    L.geoJSON(data, {
+                        style: { color: 'blue', weight: 2, fillColor: 'green', fillOpacity: 0.4 },
+                        onEachFeature: (feature, layer) => {
+                            const geojsonCityName = feature.properties.name || feature.properties.adm3_en;
+                            const cityName = cityNameMap[geojsonCityName] || geojsonCityName;
+                            console.log("Feature properties:", feature.properties);
+                            console.log("City name:", cityName);
+                            if (cityName) {
+                                layer.on('click', () => {
+                                    console.log("City clicked:", cityName);
+                                    fetch(`/filtered-graph?city=${encodeURIComponent(cityName)}`)
+                                        .then(response => response.text())
+                                        .then(html => {
+                                            if (html.trim()) {
+                                                // Open the popup with a container for the graph
+                                                layer.bindPopup('<div id="popup-content" style="width: 800px; height: 400px;"></div>', { maxWidth: 800 }).openPopup();
+
+                                                // Render the graph directly inside the popup container
+                                                const popupContent = document.querySelector('#popup-content');
+                                                popupContent.innerHTML = html;
+
+                                                setTimeout(function() {
+                                                    const graphDiv = popupContent.querySelector('div');
+                                                    if (graphDiv) {
+                                                        console.log('Graph found:', graphDiv);
+                                                        if (Plotly.Plotly) {
+                                                            console.log('Plotly is loaded');
+                                                            Plotly.relayout(graphDiv, {}); // Ensure the graph is rendered correctly
+                                                        } else {
+                                                            console.error('Plotly not found.');
+                                                        }
+                                                    } else {
+                                                        console.error('Graph div not found.');
+                                                    }
+                                                }, 1000);
+                                            } else {
+                                                layer.bindPopup("<p>No data available for this city.</p>").openPopup();
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.error("Error fetching graph:", err);
+                                            layer.bindPopup("<p>Error loading graph.</p>").openPopup();
+                                        });
+
+    
+                                });
+                            } else {
+                                console.error("City name undefined for feature:", feature);
+                            }
+                        }
+                    }).addTo(map);
+                })
+                .catch(err => console.error("Error loading GeoJSON:", err));
+        });
+    </script>
+    
 </body>
 </html>
