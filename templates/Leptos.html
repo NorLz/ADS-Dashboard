@@ -1,1 +1,85 @@
-<div class="bg-[#3e3e3e]"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" />
+    <title>ADS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#2f2f2f]">
+    <!-- Sidebar -->
+    <div class="flex h-auto">
+        <!-- {% include 'sidebar.html' %} -->
+        <div class="flex flex-col w-full">
+            <!-- Horizontal Scrolling Container -->
+            <div class="relative w-full h-screen overflow-x-auto">
+                <div class="flex w-max">
+                    <!-- Image Container -->
+                    <div class="relative h-screen w-screen">
+                        <!-- Dynamic Background Image -->
+                        <img id="dynamicImage" 
+                             src="{{ url_for('static', filename='images/leptos.jpg') }}" 
+                             class="w-screen h-screen object-cover">
+
+                        <!-- Semi-Transparent Overlay (Bottom Only) -->
+                        <div class="absolute bottom-0 w-full h-52 bg-[#000000] opacity-50 z-10"></div>
+
+                        <!-- Content (On Top of Overlay) -->
+                        <div class="absolute bottom-0 w-full flex items-center text-white z-20">
+                            <div class="flex flex-row items-center ml-24 mb-8">
+                                <!-- Vertical Line -->
+                                <div class="bg-[#ffffff] w-0.5 h-32"></div>
+                                <div class="flex flex-col mt-3 px-2">
+                                    <h1 class="text-white text-5xl font-bold ml-2 mt-2">LEPTOSPIROSIS</h1>
+                                    <h4 class="text-white text-md font-normal ml-2 py-5">
+                                        Leptospirosis is a disease caused by bacteria that affects people and animals. 
+                                        It's spread <br> in the urine (pee) of infected animals. Leptospirosis risk often increases after a hurricane 
+                                        or flood when people have contact with contaminated water or soil.
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="flex flex-row items-center mb-8 ml-0.5">
+                                <!-- Vertical Line -->
+                                <div class="bg-[#ffffff] w-0.5 h-32"></div>
+                                <div class="flex flex-col mt-3 mr-20 px-2">
+                                    <h1 class="text-white text-2xl font-bold ml-2 mb-2">Philippines</h1>
+                                    <ul class="text-white text-md font-normal ml-2 list-disc list-inside mb-4">
+                                        <li>An average of 680 cases.</li>
+                                        <li>40 leptospirosis-related deaths annually.</li>
+                                        <li>LT 398 (L.interrogans serovar Manilae), LT 101-69 (L.interrogans serovar 
+                                            <span class="ml-6"> 
+                                                Losbanos), and C3 (L) common variants of Leptospira.
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <!-- <div class="absolute inset-0 flex gap-5 justify-start items-center pb-3 z-10">
+                            <a href="#" onclick="navigate(event, 1)"
+                               class="nav-button px-10 py-1 rounded inline-block text-center bg-[#F2F2F2] opacity-50 hover:bg-[#e0e0e0] hover:opacity-100">
+                            </a>
+                            <a href="#" onclick="navigate(event, 2)"
+                               class="nav-button px-10 py-1 rounded inline-block text-center bg-[#F2F2F2] opacity-50 hover:bg-[#e0e0e0] hover:opacity-100">
+                            </a>
+                            <a href="#" onclick="navigate(event, 3)"
+                               class="nav-button px-10 py-1 rounded inline-block text-center bg-[#F2F2F2] opacity-50 hover:bg-[#e0e0e0] hover:opacity-100">
+                            </a>
+                            <a href="#" onclick="navigate(event, 4)"
+                               class="nav-button px-10 py-1 rounded inline-block text-center bg-[#F2F2F2] opacity-50 hover:bg-[#e0e0e0] hover:opacity-100">
+                            </a>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

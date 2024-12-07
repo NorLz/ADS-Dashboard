@@ -1,0 +1,33 @@
+/* Remove smooth scrolling behavior for the entire page */
+/* html {
+    scroll-behavior: auto; /* Disable smooth scroll on the whole page 
+} */
+
+/* General styles */
+body {
+    font-family: 'Satoshi', sans-serif;
+    overflow-x: hidden; 
+}
+
+.container {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth transition for sliding effect */
+}
+
+.page {
+    width: 100vw; /* Each page takes up the full screen width */
+    flex-shrink: 0; /* Prevent pages from shrinking */
+}
+
+/* Optional: Style for the active page */
+.page.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.page.inactive {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+

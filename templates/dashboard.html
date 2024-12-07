@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" />
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,12 +14,12 @@
     <div class="flex flex-row md:flex-row">
         {% include 'sidebar.html' %}
         <div class="flex-grow p-4 w-full">
-            <div class="text-[#f2f2f2] font-bold text-2xl py-4">
+            <div class="text-[#f2f2f2] font-bold text-2xl">
                 <h1>Nosos Tracking Dashboard</h1>
             </div>
 
             <!-- WEATHER INFORMATION AND PIE CHART -->
-            <div class="flex flex-row md:flex-row gap-4 ">
+            <div class="flex flex-row md:flex-row gap-4 mt-2">
                 <!-- Weather Information Box -->
                 <div class= "flex flex-col bg-[#252525] w-full md:w-1/6 h-auto rounded-2xl text-[#f2f2f2] px-3 py-2">
                     
@@ -34,124 +35,181 @@
                         </div>
                         <h2 class="font-bold text-sm md:text-base">20 November, 2024</h2>
                     <h5 class="font-light text-xs md:text-sm">Wednesday</h5>
-                        <!-- <div class="text-center mb-6">
-                            <h2 class="font-normal text-lg md:text-xl">24%</h2>
-                            <h5 class="font-light text-sm">Humidity</h5>
-                        </div>
-                        <div class="text-center mb-6">
-                            <h2 class="font-normal text-lg md:text-xl">28 km/h</h2>
-                            <h5 class="font-light text-sm">Wind Speed</h5>
-                        </div> -->
                     </div>
                 </div>
-
                 <!-- Disease Information Pie Chart -->
-                <div class="w-full md:w-2/5 mt-4 md:mt-0">
-                    <div class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4">
-                        <div class="flex flex-col">
-                            <h2>Distribution of Climatic Risk Factors by Disease</h2>
-                            <label for="diseaseSelect" class="text-[#f2f2f2] font-semibold text-sm">Select Disease:</label>
-                            <select id="diseaseSelect" class="bg-[#252525] text-[#f2f2f2] border border-[#555] rounded-lg mt-2">
-                                <option value="dengue">Dengue</option>
-                                <option value="chikungunya">Chikungunya</option>
-                                <option value="rotavirus">Rotaviral</option>
-                                <option value="typhoid">Typhoid</option>
-                                <option value="leptospirosis">Leptospirosis</option>
-                            </select>
-                            <canvas id="pieChart" class="w-40 h-40 ml-40"></canvas>
+                <div class="w-full md:w-2/5 mt-4 md:mt-0 flex flex-col items-center">
+                    <div class="w-full mt-4 md:mt-0 flex flex-col items-start bg-[#252525] h-auto rounded-2xl text-[#f2f2f2] px-6 py-2">
+                        <h2 class="font-semibold ">Climatic Factors by Historical Data of Diseases</h2>
+                        <div class="relative inline-block mt-2">
+                            <!-- Dropdown Button -->
+                            <span id="dropdownButton" class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
+                                <span id="dropdownSelectedValue" class="text-sm font-sans font-medium mb-0.5">Dengue</span>
+                                <span class="material-symbols-outlined">arrow_drop_down</span>
+                            </span>
+                        
+                            <!-- Dropdown Menu -->
+                            <div id="dropdownMenu" class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10">
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="dengue">Dengue</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="ab_diarrhea">AB Diarrhea</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="typhoid">Typhoid</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="leptospirosis">Leptospirosis</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-row-reverse justify-between items-center w-full gap-4">
+                            <canvas id="pieChart" class="size-56 mr-20 mb-6"></canvas>
+                            <div class="flex flex-col gap-3 text-[#f2f2f2] font-medium text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#C85890] inline-block rounded-full"></span>
+                                    <span>UV Radiation</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#C88509] inline-block rounded-full"></span>
+                                    <span>Solar Radiation</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#C83D09] inline-block rounded-full"></span>
+                                    <span>Temperature</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#0998C8] inline-block rounded-full"></span>
+                                    <span>Humidity</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#09A4A6] inline-block rounded-full"></span>
+                                    <span>Wind Speed</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#1C497C] inline-block rounded-full"></span>
+                                    <span>Precipitation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                 
+                </div>
+                <div class="w-full md:w-2/5 relative">
+                    <div class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 relative">
+                        <div class="flex flex-col relative">
+                            <h2 class="font-semibold">Predicted Cases by Disease</h2>
+                            <h2 class="absolute right-1 -top-1 text-lg">Week 1</h2>
+                            <canvas id="barChart" class="w-full h-60 mt-4"></canvas>
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             <!-- DISEASE INFORMATION -->
-            <div class="bg-[#252525] w-full md:w-7/12 h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 mt-3">
-                <div class="flex flex-wrap gap-4">
-                    <!-- Disease Risk Level Section -->
-                    <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
-                        <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2">warning</span>
-                        <div class="mt-10">
-                            <h2 class="font-semibold text-base">Disease Risk Level</h2>
-                            <ol class="flex flex-row items-end justify-center gap-6 mt-12">
-                                <li class="flex flex-col items-center"><span class="bg-[#28A745] w-4 h-10 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Low</h5></li>
-                                <li class="flex flex-col items-center"><span class="bg-[#FFC107] w-4 h-14 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Medium</h5></li>
-                                <li class="flex flex-col items-center"><span class="bg-[#FD7E14] w-4 h-20 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">High</h5></li>
-                                <li class="flex flex-col items-center"><span class="bg-[#DC3545] w-4 h-28 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Severe</h5></li>
-                            </ol>
+            <div class="flex flex-row gap-4">
+                <div class="bg-[#252525] w-full md:w-7/12 h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 mt-3">
+                    <div class="flex flex-wrap gap-4">
+                        <!-- Disease Risk Level Section -->
+                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
+                            <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2">warning</span>
+                            <div class="mt-10">
+                                <h2 class="font-semibold text-base">Disease Risk Level</h2>
+                                <ol class="flex flex-row items-end justify-center gap-6 mt-12">
+                                    <li class="flex flex-col items-center"><span class="bg-[#28A745] w-4 h-10 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Low</h5></li>
+                                    <li class="flex flex-col items-center"><span class="bg-[#FFC107] w-4 h-14 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Medium</h5></li>
+                                    <li class="flex flex-col items-center"><span class="bg-[#FD7E14] w-4 h-20 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">High</h5></li>
+                                    <li class="flex flex-col items-center"><span class="bg-[#DC3545] w-4 h-28 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Severe</h5></li>
+                                </ol>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Total Number of Predicted Cases -->
-                    <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,102,255,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
-                        <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2 p-0.5">trending_up</span>
-                        <div class="mt-10">
-                            <h2 class="font-semibold text-sm">Total Number of Predicted Cases for Each City</h2>
-                            <h2 class="mt-10 text-6xl font-thin">8764</h2>
-                            <h5 class="text-xs mt-12">Predicted <span class="font-bold">Hepatitis A</span> cases in <span class="font-bold">Davao City</span></h5>
+    
+                        <!-- Total Number of Predicted Cases -->
+                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,102,255,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
+                            <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2 p-0.5">trending_up</span>
+                            <div class="mt-10">
+                                <h2 class="font-semibold text-sm">Total Number of Predicted Cases for Each City</h2>
+                                <h2 class="mt-10 text-6xl font-thin">8764</h2>
+                                <h5 class="text-xs mt-12">Predicted <span class="font-bold">Hepatitis A</span> cases in <span class="font-bold">Davao City</span></h5>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Monitored Diseases -->
-                    <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,178,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
-                        <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2 p-0.5">coronavirus</span>
-                        <div class="mt-10 flex flex-col">
-                            <h2 class="font-semibold text-sm md:text-base">Monitored Diseases</h2>
-                            <div class="ml-12">
-                                <div class="flex items-center gap-4 mt-4">
-                                    <img src="{{ url_for('static', filename='images/mosquito.png') }}" class="bg-[#c5c5c5] rounded-full w-7 h-7 object-contain" alt="Mosquito">
-                                    <h2 class="text-sm font-normal">Dengue</h2>
-                                </div>
-                                <div class="flex items-center gap-4 mt-4">
-                                    <img src="{{ url_for('static', filename='images/color.png') }}" class="bg-[#c5c5c5] rounded-full w-7 h-7 object-contain" alt="Chikunguya">
-                                    <h2 class="text-sm font-normal">Chikunguya</h2>
-                                </div>
-                                <div class="flex items-center gap-4 mt-4">
-                                    <img src="{{ url_for('static', filename='images/rotavirus.png') }}" class="bg-[#c5c5c5] rounded-full w-7 h-7 object-contain" alt="Rotavirus">
-                                    <h2 class="text-sm font-normal">Rotaviral</h2>
+    
+    
+                        <!-- Monitored Diseases -->
+                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,178,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
+                            <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2 p-0.5">coronavirus</span>
+                            <div class="mt-10 flex flex-col">
+                                <h2 class="font-semibold text-sm md:text-base">Monitored Diseases</h2>
+                                <div class="ml-12">
+                                    <div class="flex items-center gap-4 mt-4">
+                                        <img src="{{ url_for('static', filename='images/mosquito.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
+                                        <h2 class="text-sm font-normal">Dengue</h2>
+                                    </div>
+                                    <div class="flex items-center gap-4 mt-4">
+                                        <img src="{{ url_for('static', filename='images/typhoid.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
+                                        <h2 class="text-sm font-normal">Typhoid Fever</h2>
+                                    </div>
+                                    <div class="flex items-center gap-4 mt-4">
+                                        <img src="{{ url_for('static', filename='images/mouse.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
+                                        <h2 class="text-sm font-normal">Leptospirosis</h2>
+                                    </div>
+                                    <div class="flex items-center gap-4 mt-4">
+                                        <img src="{{ url_for('static', filename='images/abd.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
+                                        <h2 class="text-sm font-normal">AB Diarrhea</h2>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Historical Disease Risk Section -->
+                <div class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2] px-6 py-4 mt-6 ">
+                    <div class="flex flex-col ">
+                        <h2 class="font-semibold text-lg mb-4">Historical Disease Risk of Each City</h2>
+                        <table class="w-full border-separate border-spacing-y-0.5">
+                            <thead>
+                                <tr class="text-left text-sm font-bold">
+                                    <th class="w-1/12">No.</th>
+                                    <th class="w-3/12">City</th>
+                                    <th class="w-4/12">Disease</th>
+                                    <th class="w-4/12">Risk Level</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm font-medium">
+                                <tr class="bg-[#3E3E3E] rounded-2xl">
+                                    <td class="py-2 px-3">01</td>
+                                    <td class="py-2 px-3">Davao City</td>
+                                    <td class="py-2 px-3">Dengue</td>
+                                    <td class="py-2 px-3 text-[#28A745]">Low</td>
+                                </tr>
+                                <tr class="bg-[#3E3E3E] rounded-lg">
+                                    <td class="py-2 px-3">02</td>
+                                    <td class="py-2 px-3">Cebu City</td>
+                                    <td class="py-2 px-3">Typhoid Fever</td>
+                                    <td class="py-2 px-3 text-[#FFC107]">Medium</td>
+                                </tr>
+                                <tr class="bg-[#3E3E3E] rounded-lg">
+                                    <td class="py-2 px-3">03</td>
+                                    <td class="py-2 px-3">Manila</td>
+                                    <td class="py-2 px-3">Leptospirosis</td>
+                                    <td class="py-2 px-3 text-[#FD7E14]">High</td>
+                                </tr>
+                                <tr class="bg-[#3E3E3E] rounded-lg">
+                                    <td class="py-2 px-3">04</td>
+                                    <td class="py-2 px-3">Quezon City</td>
+                                    <td class="py-2 px-3">Dengue</td>
+                                    <td class="py-2 px-3 text-[#DC3545]">Severe</td>
+                                </tr>
+                                <tr class="bg-[#3E3E3E] rounded-lg">
+                                    <td class="py-2 px-3">05</td>
+                                    <td class="py-2 px-3">Makati City</td>
+                                    <td class="py-2 px-3">AB Diarrhea</td>
+                                    <td class="py-2 px-3 text-[#28A745]">Low</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+    
             </div>
-        </div>
+            </div>
     </div>
 
-    <script>
-        const diseaseData = {
-            dengue: [60, 25, 15], 
-            chikungunya: [55, 30, 15],
-            rotavirus: [50, 40, 10],
-            typhoid: [40, 40, 20],
-            leptospirosis: [45, 45, 10]
-        };
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
-        // Environmental variable labels
-        // Create the pie chart
-        const ctx = document.getElementById('pieChart').getContext('2d');
-        let pieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: diseaseData.dengue, 
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                    hoverOffset: 4,
-                    
-                }]
-            },
-            options: {
-                responsive: false,
-                
-            }
-        });
-
-        document.getElementById('diseaseSelect').addEventListener('change', function() {
-            const selectedDisease = this.value;
-            const newData = diseaseData[selectedDisease];
-
-            pieChart.data.datasets[0].data = newData;
-            pieChart.update();
-        });
-    </script>
 </body>
 </html>
