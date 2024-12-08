@@ -5,21 +5,33 @@ const diseaseData = {
     leptospirosis: [15, 20, 30, 15, 15, 5]
 };
 
+// Remove JSON.parse() if climateImpactData is passed as an object
+const climateFactors = ["tave", "tmin", "tmax", "heat_index", "pr", "wind_speed", "rh", "solar_rad", "uv_rad"];
+
+const climateImpactData = {
+    'DENGUE FEVER': { tave: 13.7, tmin: 9.3, tmax: 15.4, heat_index: 8.7, pr: 6.8, wind_speed: 12.3, rh: 21.6, solar_rad: 6.1, uv_rad: 5.7 },
+    'ACUTE BLOODY DIARRHEA': { tave: 19.4, tmin: 16.7, tmax: 17.3, heat_index: 17.7, pr: 1.5, wind_speed: 9.9, rh: 13.1, solar_rad: 2.4, uv_rad: 1.6 },
+    'TYPHOID FEVER': { tave: 10.8, tmin: 6.5, tmax: 12.5, heat_index: 8.4, pr: 8.3, wind_speed: 10.3, rh: 34.0, solar_rad: 4.6, uv_rad: 4.1 },
+    'LEPTOSPIROSIS': { tave: 10.4, tmin: 6.2, tmax: 9.6, heat_index: 5.1, pr: 10.9, wind_speed: 4.0, rh: 26.8, solar_rad: 13.7, uv_rad: 12.8 }
+};
+
+
+// Default to a disease (e.g., "DENGUE FEVER") for initial pie chart rendering
+const initialDisease = 'DENGUE FEVER';
+const initialDiseaseData = climateImpactData[initialDisease];
+
+// Prepare initial data for the pie chart
+const initialPieData = climateFactors.map(factor => initialDiseaseData[factor]);
+
+// Initialize pie chart with the default data
 const ctx = document.getElementById('pieChart').getContext('2d');
 let pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
-        labels: ['UV Radiation', 'Solar Radiation', 'Temperature', 'Humidity', 'Wind Speed', 'Precipitation'],
+        labels: ['Average Temperature', 'Min Temperature', 'Max Temperature', 'Heat Index', 'Precipitation', 'Wind Speed', 'Humidity', 'Solar Radiation', 'UV Radiation'],
         datasets: [{
-            data: diseaseData.dengue, // Default to Dengue data
-            backgroundColor: [
-                '#C85890', // UV Radiation
-                '#C88509', // Solar Radiation
-                '#C83D09', // Temperature
-                '#0998C8', // Humidity
-                '#09A4A6', // Wind Speed
-                '#1C497C'  // Precipitation
-            ]
+            data: initialPieData, // Default to Dengue data or any initial data
+            backgroundColor: ['#023e8a', '#c1121f', '#3a5a40', '#8338ec', '#6a040f', '#240046', '#33658a', '#0d21a1', '#d90368']
         }]
     },
     options: {
@@ -155,7 +167,6 @@ const barChart = new Chart(barCtx, {
 });
 
 
-// Dropdown logic
 const dropdownButton = document.getElementById('dropdownButton');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownSelectedValue = document.getElementById('dropdownSelectedValue');
@@ -165,23 +176,22 @@ dropdownButton.addEventListener('click', () => {
     dropdownMenu.classList.toggle('hidden');
 });
 
-// Handle option selection
+// Update pie chart based on selected disease
 dropdownMenu.addEventListener('click', (event) => {
-    if (event.target.dataset.value) {
-        const selectedDisease = event.target.dataset.value;
-        const selectedText = event.target.textContent;
-
-        // Update the pie chart
-        pieChart.data.datasets[0].data = diseaseData[selectedDisease];
-        pieChart.update();
-
-        // Update the displayed value in the dropdown button
-        dropdownSelectedValue.textContent = selectedText;
-
-        // Hide menu after selection
-        dropdownMenu.classList.add('hidden');
-    }
+    const selectedDisease = event.target.getAttribute('data-value');
+    dropdownSelectedValue.innerText = event.target.innerText;
+    updatePieChart(selectedDisease);
 });
+
+function updatePieChart(disease) {
+    const diseaseData = climateImpactData[disease];
+    const updatedPieData = climateFactors.map(factor => diseaseData[factor]);
+
+    pieChart.data.datasets[0].data = updatedPieData;
+    pieChart.update();
+}
+
+
 
 // Close the dropdown if clicked outside
 document.addEventListener('click', (event) => {

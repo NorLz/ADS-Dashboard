@@ -30,4 +30,23 @@ body {
     transform: translateX(-100%);
 }
 
+.overflow-y-auto {
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 18rem; /* Adjust height limit (e.g., 288px) */
+}
 
+/* Table styling to maintain structure */
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px; /* Adjust padding for better readability */
+}
+
+th {
+    position: sticky; /* Keep header visible during scroll */
+    top: 0; /* Stick to the top of the container */
+    background-color: #252525; /* Match the table background */
+}

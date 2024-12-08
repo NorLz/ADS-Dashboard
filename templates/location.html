@@ -20,6 +20,15 @@
                 <form action="/location" method="POST" enctype="multipart/form-data">
                     <label for="file" class="block text-lg mb-2">Select a CSV File:</label>
                     <input type="file" id="file" name="file" class="block w-full mb-5">
+
+                    <label for="disease" class="block text-lg mb-2">Select a Disease:</label>
+                        <select id="disease" name="disease" class="block w-full mb-5">
+                            <option value="abd">Acute Bloody Diarrhea</option>
+                            <option value="dengue">Dengue Fever</option>
+                            <option value="leptos">Leptospirosis</option>
+                            <option value="typhoid">Typhoid Fever</option>
+                        </select>
+
                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Upload and Predict</button>
                 </form>
                 
@@ -47,78 +56,93 @@
                 "City of Mandaue": "Mandaue City",
                 "City of Tacloban": "Tacloban City",
                 "City of Zamboanga": "Zamboanga City",
-                "City of Cagayan de Oro": "Cagayan de Oro City",
+                "City of Cagayan De Oro": "Cagayan De Oro City",
                 "City of Mandaluyong": "Mandaluyong City",
                 "City of Navotas": "Navotas City",
                 "City of Muntinlupa": "Muntinlupa City",
             };
-    
-            const map = L.map('map').setView([12.8797, 121.7740], 6);
-    
+        
+            // Define color mapping for risk levels
+            const riskColors = {
+                low: "green",
+                medium: "yellow",
+                high: "orange",
+                severe: "red",
+                none: "black", // Default for cities not in the dataset
+            };
+            
+            // Define the geographical bounds for the Philippines
+            const philippinesBounds = [[4.5, 116.5], [21.0, 127.0]];
+
+            const map = L.map('map', {
+                center: [12.8797, 121.7740], // Centered on the Philippines
+                zoom: 6,
+                minZoom: 5, // Minimum zoom level
+                maxBounds: philippinesBounds, // Limit the map bounds to the Philippines
+            });
+        
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.carto.com/">CARTO</a>',
                 subdomains: 'abcd',
                 maxZoom: 19
             }).addTo(map);
-    
+        
             fetch('/geojson/cities')
                 .then(response => response.json())
                 .then(data => {
-                    console.log("GeoJSON data:", data);
+                    const riskColors = {
+                        low: "#28A745",
+                        medium: "#FFC107",
+                        high: "#FD7E14",
+                        severe: "#DC3545",
+                        none: "black" // Default for cities not in the dataset
+                    };
+
                     L.geoJSON(data, {
-                        style: { color: 'blue', weight: 2, fillColor: 'green', fillOpacity: 0.4 },
+                        style: feature => ({
+                            fillColor: riskColors[feature.properties.risk_level || "none"],
+                            color: "blue",
+                            weight: 2,
+                            fillOpacity: 0.9,
+                        }),
                         onEachFeature: (feature, layer) => {
-                            const geojsonCityName = feature.properties.name || feature.properties.adm3_en;
-                            const cityName = cityNameMap[geojsonCityName] || geojsonCityName;
-                            console.log("Feature properties:", feature.properties);
-                            console.log("City name:", cityName);
-                            if (cityName) {
-                                layer.on('click', () => {
-                                    console.log("City clicked:", cityName);
-                                    fetch(`/filtered-graph?city=${encodeURIComponent(cityName)}`)
-                                        .then(response => response.text())
-                                        .then(html => {
-                                            if (html.trim()) {
-                                                // Open the popup with a container for the graph
-                                                layer.bindPopup('<div id="popup-content" style="width: 800px; height: 400px;"></div>', { maxWidth: 800 }).openPopup();
+                            const cityName = feature.properties.adm3_en || "Unknown";
+                            const riskLevel = feature.properties.risk_level || "none";
 
-                                                // Render the graph directly inside the popup container
-                                                const popupContent = document.querySelector('#popup-content');
-                                                popupContent.innerHTML = html;
+                            // Bind a popup with city name and risk level
+                            layer.bindPopup(`<strong>${cityName}</strong><br>Risk Level: ${riskLevel}`);
 
-                                                setTimeout(function() {
-                                                    const graphDiv = popupContent.querySelector('div');
-                                                    if (graphDiv) {
-                                                        console.log('Graph found:', graphDiv);
-                                                        if (Plotly.Plotly) {
-                                                            console.log('Plotly is loaded');
-                                                            Plotly.relayout(graphDiv, {}); // Ensure the graph is rendered correctly
-                                                        } else {
-                                                            console.error('Plotly not found.');
-                                                        }
-                                                    } else {
-                                                        console.error('Graph div not found.');
-                                                    }
-                                                }, 1000);
-                                            } else {
-                                                layer.bindPopup("<p>No data available for this city.</p>").openPopup();
-                                            }
-                                        })
-                                        .catch(err => {
-                                            console.error("Error fetching graph:", err);
-                                            layer.bindPopup("<p>Error loading graph.</p>").openPopup();
-                                        });
+                            // Add click event to zoom in
+                            layer.on('click', function (e) {
+                                // Extract the first coordinate pair (or compute the centroid for polygons)
+                                let coordinates;
+                                if (feature.geometry.type === "Polygon") {
+                                    // Calculate centroid for a single polygon
+                                    const polygon = feature.geometry.coordinates[0];
+                                    const lon = polygon.reduce((sum, coord) => sum + coord[0], 0) / polygon.length;
+                                    const lat = polygon.reduce((sum, coord) => sum + coord[1], 0) / polygon.length;
+                                    coordinates = [lat, lon];
+                                } else if (feature.geometry.type === "MultiPolygon") {
+                                    // Use the centroid of the first polygon
+                                    const polygon = feature.geometry.coordinates[0][0];
+                                    const lon = polygon.reduce((sum, coord) => sum + coord[0], 0) / polygon.length;
+                                    const lat = polygon.reduce((sum, coord) => sum + coord[1], 0) / polygon.length;
+                                    coordinates = [lat, lon];
+                                } else {
+                                    // Use the raw coordinates for Point geometries
+                                    coordinates = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
+                                }
 
-    
-                                });
-                            } else {
-                                console.error("City name undefined for feature:", feature);
-                            }
+                                // Zoom into the city
+                                const latLng = L.latLng(coordinates[0], coordinates[1]);
+                                map.setView(latLng, 10); // Zoom to level 11
+                    });
                         }
                     }).addTo(map);
                 })
-                .catch(err => console.error("Error loading GeoJSON:", err));
-        });
+                .catch(error => console.error('Error loading GeoJSON:', error));
+
+        });        
     </script>
     
 </body>

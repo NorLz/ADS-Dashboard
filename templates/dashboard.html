@@ -50,10 +50,10 @@
                         
                             <!-- Dropdown Menu -->
                             <div id="dropdownMenu" class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10">
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="dengue">Dengue</div>
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="ab_diarrhea">AB Diarrhea</div>
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="typhoid">Typhoid</div>
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="leptospirosis">Leptospirosis</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="DENGUE FEVER">Dengue</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="ACUTE BLOODY DIARRHEA">AB Diarrhea</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="TYPHOID FEVER">Typhoid</div>
+                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="LEPTOSPIROSIS">Leptospirosis</div>
                             </div>
                         </div>
                         
@@ -61,28 +61,40 @@
                             <canvas id="pieChart" class="size-56 mr-20 mb-6"></canvas>
                             <div class="flex flex-col gap-3 text-[#f2f2f2] font-medium text-xs">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#C85890] inline-block rounded-full"></span>
-                                    <span>UV Radiation</span>
+                                    <span class="w-2 h-4 bg-[#023e8a] inline-block rounded-full"></span>
+                                    <span>Average Temperature</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#C88509] inline-block rounded-full"></span>
-                                    <span>Solar Radiation</span>
+                                    <span class="w-2 h-4 bg-[#c1121f] inline-block rounded-full"></span>
+                                    <span>Min Temperature</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#C83D09] inline-block rounded-full"></span>
-                                    <span>Temperature</span>
+                                    <span class="w-2 h-4 bg-[#3a5a40] inline-block rounded-full"></span>
+                                    <span>Max Temperature</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#0998C8] inline-block rounded-full"></span>
-                                    <span>Humidity</span>
+                                    <span class="w-2 h-4 bg-[#8338ec] inline-block rounded-full"></span>
+                                    <span>Heat Index</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#09A4A6] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#6a040f] inline-block rounded-full"></span>
+                                    <span>Precipitation</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#240046] inline-block rounded-full"></span>
                                     <span>Wind Speed</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#1C497C] inline-block rounded-full"></span>
-                                    <span>Precipitation</span>
+                                    <span class="w-2 h-4 bg-[#33658a] inline-block rounded-full"></span>
+                                    <span>Humidity</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#0d21a1] inline-block rounded-full"></span>
+                                    <span>Solar Radiation</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-4 bg-[#d90368] inline-block rounded-full"></span>
+                                    <span>UV Radiation</span>
                                 </div>
                             </div>
                         </div>
@@ -157,51 +169,40 @@
                     </div>
                 </div>
                 <!-- Historical Disease Risk Section -->
-                <div class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2] px-6 py-4 mt-6 ">
-                    <div class="flex flex-col ">
+                <div class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2] px-6 py-4 mt-6">
+                    <div class="flex flex-col">
                         <h2 class="font-semibold text-lg mb-4">Historical Disease Risk of Each City</h2>
-                        <table class="w-full border-separate border-spacing-y-0.5">
-                            <thead>
-                                <tr class="text-left text-sm font-bold">
-                                    <th class="w-1/12">No.</th>
-                                    <th class="w-3/12">City</th>
-                                    <th class="w-4/12">Disease</th>
-                                    <th class="w-4/12">Risk Level</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-sm font-medium">
-                                <tr class="bg-[#3E3E3E] rounded-2xl">
-                                    <td class="py-2 px-3">01</td>
-                                    <td class="py-2 px-3">Davao City</td>
-                                    <td class="py-2 px-3">Dengue</td>
-                                    <td class="py-2 px-3 text-[#28A745]">Low</td>
-                                </tr>
-                                <tr class="bg-[#3E3E3E] rounded-lg">
-                                    <td class="py-2 px-3">02</td>
-                                    <td class="py-2 px-3">Cebu City</td>
-                                    <td class="py-2 px-3">Typhoid Fever</td>
-                                    <td class="py-2 px-3 text-[#FFC107]">Medium</td>
-                                </tr>
-                                <tr class="bg-[#3E3E3E] rounded-lg">
-                                    <td class="py-2 px-3">03</td>
-                                    <td class="py-2 px-3">Manila</td>
-                                    <td class="py-2 px-3">Leptospirosis</td>
-                                    <td class="py-2 px-3 text-[#FD7E14]">High</td>
-                                </tr>
-                                <tr class="bg-[#3E3E3E] rounded-lg">
-                                    <td class="py-2 px-3">04</td>
-                                    <td class="py-2 px-3">Quezon City</td>
-                                    <td class="py-2 px-3">Dengue</td>
-                                    <td class="py-2 px-3 text-[#DC3545]">Severe</td>
-                                </tr>
-                                <tr class="bg-[#3E3E3E] rounded-lg">
-                                    <td class="py-2 px-3">05</td>
-                                    <td class="py-2 px-3">Makati City</td>
-                                    <td class="py-2 px-3">AB Diarrhea</td>
-                                    <td class="py-2 px-3 text-[#28A745]">Low</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        
+                        <!-- Scrollable Table Container -->
+                        <div class="overflow-y-auto max-h-72">
+                            <table class="w-full border-separate border-spacing-y-0.5">
+                                <thead>
+                                    <tr class="text-left text-sm font-bold">
+                                        <th class="w-1/12">No.</th>
+                                        <th class="w-3/12">City</th>
+                                        <th class="w-4/12">Disease</th>
+                                        <th class="w-4/12">Risk Level</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm font-medium">
+                                    {% for row in disease_data %}
+                                    <tr class="bg-[#3E3E3E] rounded-lg">
+                                        <td class="py-2 px-3">{{ loop.index }}</td>
+                                        <td class="py-2 px-3">{{ row['City'] }}</td>
+                                        <td class="py-2 px-3">{{ row['Disease'] }}</td>
+                                        <td class="py-2 px-3 {{ 
+                                            'text-[#28A745]' if row['Risk_Level'] == 'Low' else
+                                            'text-[#FFC107]' if row['Risk_Level'] == 'Medium' else
+                                            'text-[#FD7E14]' if row['Risk_Level'] == 'High' else
+                                            'text-[#DC3545]' if row['Risk_Level'] == 'Severe' else ''
+                                        }}">
+                                            {{ row['Risk_Level'] }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
     
@@ -210,6 +211,9 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-
+    <script>
+        const climateImpactData = {{ climate_impact|safe }};
+    </script>
+    
 </body>
 </html>
