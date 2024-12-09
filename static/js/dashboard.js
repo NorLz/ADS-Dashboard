@@ -104,6 +104,7 @@ const barCtx = document.getElementById('barChart').getContext('2d');
 const barChart = new Chart(barCtx, {
     type: 'bar',
     data: {
+        //labels: ['Cagayan De Oro City', 'City of Mandaluyong', 'City of Muntinlupa', 'City of Navotas', 'Dagupan City', 'Davao City', 'Iloilo City', 'Legazpi City', 'Mandaue City', 'Palayan City', 'Tacloban City', 'Zamboanga City'],
         labels: ['Dengue', 'AB Diarrhea', 'Typhoid Fever', 'Leptospirosis'],
         datasets: [{
             label: 'Cases',
@@ -175,7 +176,7 @@ const barChart = new Chart(barCtx, {
     }]
 });
 
-
+// pie chart dropdowns
 const dropdownButton = document.getElementById('dropdownButton');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownSelectedValue = document.getElementById('dropdownSelectedValue');
@@ -199,8 +200,6 @@ function updatePieChart(disease) {
     pieChart.data.datasets[0].data = updatedPieData;
     pieChart.update();
 }
-
-
 
 // Close the dropdown if clicked outside
 document.addEventListener('click', (event) => {
