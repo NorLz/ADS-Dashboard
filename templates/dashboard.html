@@ -11,9 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-[#161616]">
-    <div class="flex flex-row md:flex-row">
-        {% include 'sidebar.html' %}
-        <div class="flex-grow p-4 w-full">
+    <div class="flex flex-row md:flex-row h-max ">
+            {% include 'sidebar.html' %}
+        <div class="flex-grow p-6 w-full">
             <div class="text-[#f2f2f2] font-bold text-2xl">
                 <h1>Nosos Tracking Dashboard</h1>
             </div>
@@ -61,46 +61,46 @@
                             <canvas id="pieChart" class="size-56 mr-20 mb-6"></canvas>
                             <div class="flex flex-col gap-3 text-[#f2f2f2] font-medium text-xs">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#023e8a] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#1C497C] inline-block rounded-full"></span>
                                     <span>Average Temperature</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#c1121f] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#C85890] inline-block rounded-full"></span>
                                     <span>Min Temperature</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#3a5a40] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#09A4A6] inline-block rounded-full"></span>
                                     <span>Max Temperature</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#8338ec] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#C83D09] inline-block rounded-full"></span>
                                     <span>Heat Index</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#6a040f] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#0998C8] inline-block rounded-full"></span>
                                     <span>Precipitation</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#240046] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#C88509] inline-block rounded-full"></span>
                                     <span>Wind Speed</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#33658a] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#3b5998] inline-block rounded-full"></span>
                                     <span>Humidity</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#0d21a1] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#004c4c] inline-block rounded-full"></span>
                                     <span>Solar Radiation</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#d90368] inline-block rounded-full"></span>
+                                    <span class="w-2 h-4 bg-[#D90368] inline-block rounded-full"></span>
                                     <span>UV Radiation</span>
                                 </div>
                             </div>
                         </div>
                     </div>                 
                 </div>
-                <div class="w-full md:w-2/5 relative">
+                <div class="w-full md:w-2/5 relative -mt-10">
                     <div class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 relative">
                         <div class="flex flex-col relative">
                             <h2 class="font-semibold">Predicted Cases by Top Cities</h2>
@@ -132,8 +132,8 @@
             </div>
 
             <!-- DISEASE INFORMATION -->
-            <div class="flex flex-row gap-4">
-                <div class="bg-[#252525] w-full md:w-7/12 h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 mt-3">
+            <div class="flex flex-row gap-6">
+                <div class="bg-[#252525] w-full md:w-7/12 rounded-2xl text-[#f2f2f2] px-3 py-4 mt-5">
                     <div class="flex flex-wrap gap-4">
                         <!-- Disease Risk Level Section -->
                         <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
@@ -218,28 +218,32 @@
                     </div>
                 </div>
                 <!-- Historical Disease Risk Section -->
-                <div class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2] px-6 py-4 mt-6">
+                <div class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2] -mt-3">
                     <div class="flex flex-col">
-                        <h2 class="font-semibold text-lg mb-4">Historical Disease Risk of Each City</h2>
-                        
+                        <h2 class="font-semibold text-lg mb-2 py-5 px-5">Historical Disease Risk of Each City</h2>
+                        <button class="absolute right-2 top-2 text-lg bg-[#3E3E3E] p-2 rounded-full size-10 flex items-center">
+                            <span class="material-symbols-outlined ">
+                                search
+                                </span>
+                        </button>
                         <!-- Scrollable Table Container -->
-                        <div class="overflow-y-auto max-h-72">
-                            <table class="w-full border-separate border-spacing-y-0.5">
+                        <div class="overflow-y-scroll max-h-96 rounded-b-2xl custom-scrollbar">
+                            <table class="w-full border-separate border-spacing-y-0.5 bg-[#3A3A3A] rounded-b-2xl">
                                 <thead>
-                                    <tr class="text-left text-sm font-bold">
-                                        <th class="w-1/12">No.</th>
-                                        <th class="w-3/12">City</th>
-                                        <th class="w-4/12">Disease</th>
-                                        <th class="w-4/12">Risk Level</th>
+                                    <tr class="text-left text-xs">
+                                        <th class="w-1/12 py-3 px-12 font-extralight bg-[#3A3A3A]">No.</th>
+                                        <th class="w-3/12 px-3 font-extralight bg-[#3A3A3A]">City</th>
+                                        <th class="w-4/12 px-10 font-extralight bg-[#3A3A3A]">Disease</th>
+                                        <th class="w-4/12 px-6 font-extralight bg-[#3A3A3A]">Risk Level</th>
                                     </tr>
                                 </thead>
-                                <tbody class="text-sm font-medium">
+                                <tbody class="text-sm font-medium rounded-full">
                                     {% for row in disease_data %}
-                                    <tr class="bg-[#3E3E3E] rounded-lg">
-                                        <td class="py-2 px-3">{{ loop.index }}</td>
+                                    <tr class="{{ 'bg-[#4c4c4c]' if loop.index is odd else 'bg-[#3A3A3A]' }} rounded-lg">
+                                        <td class="py-4 px-12">{{ loop.index }}</td>
                                         <td class="py-2 px-3">{{ row['City'] }}</td>
-                                        <td class="py-2 px-3">{{ row['Disease'] }}</td>
-                                        <td class="py-2 px-3 {{ 
+                                        <td class="py-2 px-10">{{ row['Disease'] }}</td>
+                                        <td class="py-2 px-6 {{ 
                                             'text-[#28A745]' if row['Risk_Level'] == 'Low' else
                                             'text-[#FFC107]' if row['Risk_Level'] == 'Medium' else
                                             'text-[#FD7E14]' if row['Risk_Level'] == 'High' else
@@ -251,6 +255,7 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            
                         </div>
                     </div>
                 </div>
@@ -261,7 +266,7 @@
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     <script>
-        const climateImpactData = {{ climate_impact|safe }};
+        const climateImpactData = {{ climate_impact|safe }}
     </script>
     <script>
         // Handle dropdown logic only if data is available
