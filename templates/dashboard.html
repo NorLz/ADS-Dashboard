@@ -103,12 +103,31 @@
                 <div class="w-full md:w-2/5 relative">
                     <div class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 relative">
                         <div class="flex flex-col relative">
-                            <h2 class="font-semibold">Predicted Cases by Disease</h2>
-                            <h2 class="absolute right-1 -top-1 text-lg">Week 1</h2>
+                            <h2 class="font-semibold">Predicted Cases by Top Cities</h2>
+                
+                            <!-- Week Selection Dropdown -->
+                            <div class="relative inline-block mt-2">
+                                <span id="dropdownButtonWeeks" class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
+                                    <span id="dropdownSelectedValueWeeks" class="text-sm font-sans font-medium mb-0.5">All Weeks</span>
+                                    <span class="material-symbols-outlined">arrow_drop_down</span>
+                                </span>
+                
+                                <!-- Dropdown Menu -->
+                                <div id="dropdownMenuWeeks" class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10">
+                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="all">All Weeks</div>
+                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="1">Week 1</div>
+                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="2">Week 2</div>
+                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="3">Week 3</div>
+                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="4">Week 4</div>
+                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="5">Week 5</div>
+                                </div>
+                            </div>
+                
                             <canvas id="barChart" class="w-full h-60 mt-4"></canvas>
                         </div>
                     </div>
                 </div>
+                
                 
             </div>
 
@@ -294,7 +313,172 @@
             });
         });
         {% endif %}
-
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Default data for an empty chart
+            let labels = [];
+            let data = [];
+        
+            // Parse the backend data
+            let topCitiesAllWeeks = {};
+            let weeklyTotals = {};
+        
+            // Check if the data exists before assigning
+            {% if top_4_cities %}
+                topCitiesAllWeeks = {{ top_4_cities|tojson }};
+            {% endif %}
+        
+            {% if weekly_totals %}
+                weeklyTotals = {{ weekly_totals|tojson }};
+            {% endif %}
+        
+            // Function to update the chart
+            const updateChart = (week) => {
+                if (week === "all") {
+                    // Use top 4 cities for all weeks
+                    labels = Object.keys(topCitiesAllWeeks).map(city => city.charAt(0).toUpperCase() + city.slice(1)); // Capitalize city names
+                    data = Object.values(topCitiesAllWeeks);
+                } else {
+                    // Match backend keys like "Week 1", "Week 2", etc.
+                    const weekKey = `Week ${week}`;
+                    
+                    if (weeklyTotals[weekKey]) {
+                        // Filter for the selected week
+                        const weeklyData = Object.entries(weeklyTotals[weekKey])
+                            .sort(([, casesA], [, casesB]) => casesB - casesA) // Sort descending by cases
+                            .slice(0, 4); // Get top 4 cities
+                        
+                        labels = weeklyData.map(([city]) => city.charAt(0).toUpperCase() + city.slice(1)); // Capitalize city names
+                        data = weeklyData.map(([, cases]) => cases);
+                    } else {
+                        // Default to empty data if the week has no data
+                        labels = [];
+                        data = [];
+                    }
+                }
+        
+                // Update the chart with new data
+                barChart.data.labels = labels;
+                barChart.data.datasets[0].data = data;
+                barChart.update();
+            };
+        
+            // Define the gradient colors for each bar
+            const barColors = [
+                ['189, 189, 189', '255, 102, 102'], // Gradient for the first bar
+                ['189, 189, 189', '102, 178, 102'], // Gradient for the second bar
+                ['189, 189, 189', '102, 102, 255'], // Gradient for the third bar
+                ['189, 189, 189', '255, 193, 7'],   // Gradient for the fourth bar
+            ];
+        
+            // Function to create gradients for bars
+            function getGradient(ctx, chartArea, colors) {
+                const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                gradient.addColorStop(0, `rgba(${colors[0]}, 1)`);
+                gradient.addColorStop(1, `rgba(${colors[1]}, 1)`);
+                return gradient;
+            }
+        
+            // Initialize the chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Cases',
+                        data: data,
+                        backgroundColor: function (context) {
+                            const { chart, dataIndex } = context;
+                            const { ctx, chartArea } = chart;
+        
+                            if (!chartArea) {
+                                return; // Wait until chartArea is available
+                            }
+        
+                            // Pass specific colors for the gradient based on index
+                            return getGradient(ctx, chartArea, barColors[dataIndex] || ['189, 189, 189', '255, 255, 255']);
+                        },
+                        borderWidth: 1,
+                        borderRadius: 15,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#F2F2F2', // X-axis label color
+                            },
+                            grid: {
+                                display: false // Hide grid lines on the X-axis
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#F2F2F2', // Y-axis label color
+                            },
+                            grid: {
+                                display: true // Show grid lines on the Y-axis
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'valueOnTop',
+                    afterDatasetsDraw: (chart) => {
+                        const { ctx } = chart;
+                        chart.data.datasets.forEach((dataset, i) => {
+                            const meta = chart.getDatasetMeta(i);
+                            meta.data.forEach((bar, index) => {
+                                const value = dataset.data[index];
+                                const { x, y } = bar.tooltipPosition();
+        
+                                ctx.fillStyle = '#f2f2f2'; // Text color
+                                ctx.font = 'bold 12px Montserrat'; // Font style
+                                ctx.textAlign = 'center';
+                                ctx.fillText(value, x, y - 10); // Positioning the text above the bar
+                            });
+                        });
+                    }
+                }]
+            });
+        
+            // Dropdown interaction
+            const dropdownMenu = document.getElementById('dropdownMenuWeeks');
+            const dropdownButton = document.getElementById('dropdownButtonWeeks');
+            const dropdownSelectedValue = document.getElementById('dropdownSelectedValueWeeks');
+        
+            dropdownMenu.querySelectorAll('div[data-value]').forEach(item => {
+                item.addEventListener('click', () => {
+                    const selectedValue = item.getAttribute('data-value');
+                    dropdownSelectedValue.textContent = selectedValue === "all" ? "All Weeks" : `Week ${selectedValue}`;
+                    updateChart(selectedValue); // Update the chart based on the selection
+                    dropdownMenu.classList.add('hidden'); // Hide the dropdown menu
+                });
+            });
+        
+            // Toggle dropdown visibility
+            dropdownButton.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('hidden');
+            });
+        
+            // Initialize the chart with "All Weeks" data
+            updateChart("all");
+        });
+        
+    </script>
+    
+    
 </body>
 </html>

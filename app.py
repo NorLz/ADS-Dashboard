@@ -95,10 +95,43 @@ def dashboard():
     # Ensure city_totals is a dictionary and keys are properly standardized
     print("City Totals Generated from Predictions:", city_totals)
     
+    # Ensure city_totals is a dictionary and keys are properly standardized
+    city_totals = dict(sorted(city_totals.items(), key=lambda x: x[1], reverse=True))  # Sort by total cases descending
+    top_4_cities = dict(list(city_totals.items())[:4])  # Get the top 4 cities
+    
+    # Generate weekly_totals from predictions (using only forecasted data)
+    weekly_totals = {}
+    if not predictions.empty:
+        # Ensure the 'date' column is in datetime format
+        predictions['date'] = pd.to_datetime(predictions['date'], errors='coerce')
+
+        # Filter predictions to include only forecasted data (after the last actual date)
+        last_date = pd.to_datetime(session.get('last_date', pd.Timestamp.now()))
+        forecast_predictions = predictions[predictions['date'] > last_date]
+
+        # Add 'week' column based on forecasted dates
+        forecast_start_date = forecast_predictions['date'].min()  # Earliest forecasted date
+        forecast_predictions['week'] = forecast_predictions['date'].apply(
+            lambda x: f"Week {(x - forecast_start_date).days // 7 + 1}"
+        )
+        forecast_predictions['week'] = forecast_predictions['week'].replace({'Week 6': 'Week 5'})  # Handle overflow if any
+
+        # Group by week and city
+        grouped = forecast_predictions.groupby(['week', 'adm3_en'])['Predicted_Cases'].sum()
+
+        # Transform into nested dictionary: weekly_totals[week][city] = total_cases
+        for (week, city), total_cases in grouped.items():
+            if week not in weekly_totals:
+                weekly_totals[week] = {}
+            standardized_city = city.strip().lower()
+            weekly_totals[week][standardized_city] = total_cases
+    
     return render_template(
         'dashboard.html',
         disease_data=disease_data,
+        top_4_cities=top_4_cities,
         city_totals=city_totals,
+        weekly_totals=weekly_totals,
         unique_cities=unique_cities,
         selected_disease=selected_disease
     )
