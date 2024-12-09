@@ -58,14 +58,51 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
-    # Load CSV data
+    # Load historical disease data from the CSV file
     disease_data = []
     with open('static/disease_risk_by_city_historical.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             disease_data.append(row)
 
-    return render_template('dashboard.html', disease_data=disease_data)
+    # Load prediction data from the session
+    predictions_data = session.get('predictions', {})
+    unique_cities = session.get('unique_cities', [])
+    selected_disease = session.get('selected_disease', 'Disease').title()
+    
+    # Parse the predictions data if it exists
+    if predictions_data:
+        predictions = pd.read_json(predictions_data, orient='records')
+    else:
+        predictions = pd.DataFrame()
+
+    # Check if the 'adm3_en' column exists in predictions
+    if 'adm3_en' not in predictions.columns:
+        print("adm3_en column is missing!")
+        # Fix column names by stripping extra spaces and converting to lowercase
+        predictions.columns = [col.strip().lower() for col in predictions.columns]
+        print("Columns in predictions:", predictions.columns)
+    else:
+        print("adm3_en column exists.")
+
+    # Generate city_totals from predictions
+    city_totals = {}
+    if 'adm3_en' in predictions.columns:
+        for city, total_cases in predictions.groupby('adm3_en')['Predicted_Cases'].sum().items():
+            standardized_city = city.strip().lower()
+            city_totals[standardized_city] = total_cases
+
+    # Ensure city_totals is a dictionary and keys are properly standardized
+    print("City Totals Generated from Predictions:", city_totals)
+    
+    return render_template(
+        'dashboard.html',
+        disease_data=disease_data,
+        city_totals=city_totals,
+        unique_cities=unique_cities,
+        selected_disease=selected_disease
+    )
+
 
 
 @app.route('/location', methods=["GET", "POST"])
@@ -114,6 +151,8 @@ def location():
             last_row = city_data.iloc[-1]
             future_dates = pd.date_range(last_row['date'] + pd.Timedelta(days=7), periods=forecast_horizon, freq='7D')
 
+            forecast_predictions = []
+
             for future_date in future_dates:
                 lagged_features = [last_row[f"case_total_lag{i}"] for i in range(1, 5)]
                 lagged_features = [last_row['Predicted_Cases']] + lagged_features
@@ -131,34 +170,68 @@ def location():
                     else:
                         last_row[f"case_total_lag{i}"] = last_row[f"case_total_lag{i-1}"]
 
-                predictions.append({'date': future_date, 'adm3_en': city, 'Predicted_Cases': last_row['Predicted_Cases']})
+                forecast_predictions.append({'date': future_date, 'adm3_en': city, 'Predicted_Cases': last_row['Predicted_Cases']})
 
-            predictions.extend(city_data[['date', 'adm3_en', 'Predicted_Cases']].to_dict('records'))
-            
+            # Only add the forecasted predictions, not the historical data
+            predictions.extend(forecast_predictions)
+
         predictions = pd.DataFrame(predictions)
-        predictions['adm3_en'] = predictions['adm3_en'].str.strip().str.lower() # Standardize city names again
+        predictions['adm3_en'] = predictions['adm3_en'].str.strip().str.lower()  # Standardize city names again
         
+        # Get unique cities and total predicted cases per city
+        # unique_cities = predictions['adm3_en'].unique()
+        
+        # Get the last actual date
+        last_date = pd.to_datetime(session.get('last_date', pd.Timestamp.now()))
+
+        # Filter predictions to include only forecasted values (after the last actual date)
+        forecast_predictions = predictions[predictions['date'] > last_date]
+
+        # Get unique cities and total predicted cases per city (only forecasted)
+        unique_cities = forecast_predictions['adm3_en'].unique()
+        city_totals = forecast_predictions.groupby('adm3_en')['Predicted_Cases'].sum().to_dict()
+
+        # Print to console for debugging or logging purposes
+        print("Unique Cities:")
+        print(unique_cities)
+
+        print("\nTotal Predicted Cases Per City:")
+        for city, total in city_totals.items():
+            print(f"{city}: {total}")
+            
         # Save predictions in session as JSON
         session['predictions'] = predictions.to_json(orient='records', date_format='iso')
         session['selected_disease'] = selected_disease
+        session['unique_cities'] = unique_cities.tolist()
+        city_totals = {city.lower(): total for city, total in city_totals.items()}
+        session['city_totals'] = city_totals
         return redirect(url_for('location'))
 
-    # Check if predictions exist in the session and are properly formatted
     predictions_data = session.get('predictions', [])
     if predictions_data:
         predictions = pd.read_json(predictions_data, orient='records')
+        # Get the last actual date
+        last_date = pd.to_datetime(session.get('last_date', pd.Timestamp.now()))
+
+        # Filter predictions to include only forecasted values (after the last actual date)
+        forecast_predictions = predictions[predictions['date'] > last_date]
+        unique_cities = session.get('unique_cities', [])
+        city_totals = session.get('city_totals', {})
     else:
         predictions = pd.DataFrame()  # Empty DataFrame if no predictions are found
+        forecast_predictions = pd.DataFrame() 
+        unique_cities = []
+        city_totals = {}
+
     
     graph_html = ""
-    if not predictions.empty:
-        predictions['date'] = pd.to_datetime(predictions['date'])
-        last_date = pd.to_datetime(session.get('last_date', pd.Timestamp.now()))
-        predictions['Type'] = 'Historical'
-        predictions.loc[predictions['date'] > last_date, 'Type'] = 'Forecast'
+    if not forecast_predictions.empty:
+        forecast_predictions['date'] = pd.to_datetime(forecast_predictions['date'])
+        forecast_predictions['Type'] = 'Forecast'
 
+        # Create the plot using only forecast data
         fig = px.line(
-            predictions,
+            forecast_predictions,
             x='date',
             y='Predicted_Cases',
             color='adm3_en',
@@ -166,8 +239,14 @@ def location():
             title=f"{session.get('selected_disease', 'Disease')} Case Predictions"
         )
         graph_html = fig.to_html(full_html=False)
+    
+    return render_template(
+        'location.html',
+        graph_html=graph_html,
+        unique_cities=unique_cities,
+        city_totals=city_totals
+    )
 
-    return render_template('location.html', graph_html=graph_html)
 
 
 

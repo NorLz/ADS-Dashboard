@@ -9,20 +9,19 @@
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
 </head>
 <body class="bg-[#161616]">
-    <div class="flex flex-row md:flex-row h-max ">
-            {% include 'sidebar.html' %}
-        <div class="flex-grow p-6 w-full">
+    <div class="flex flex-row md:flex-row">
+        {% include 'sidebar.html' %}
+        <div class="flex-grow p-4 w-full">
             <div class="text-[#f2f2f2] font-bold text-2xl">
                 <h1>Nosos Tracking Dashboard</h1>
             </div>
 
             <!-- WEATHER INFORMATION AND PIE CHART -->
-            <div class="flex flex-row md:flex-row gap-6 mt-2">
+            <div class="flex flex-row md:flex-row gap-4 mt-2">
                 <!-- Weather Information Box -->
-                <div class= "flex flex-col bg-[#252525] w-full md:w-1/6 rounded-2xl text-[#f2f2f2] px-3 py-3">
+                <div class= "flex flex-col bg-[#252525] w-full md:w-1/6 h-auto rounded-2xl text-[#f2f2f2] px-3 py-2">
                     
                     <div class="flex flex-col justify-between items-start px-1">
                         <img src="{{ url_for('static', filename='images/Weather.png') }}" class="bg-[#252525] w-20 h-20 object-contain" alt="Weather">
@@ -101,7 +100,7 @@
                         </div>
                     </div>                 
                 </div>
-                <div class="w-full md:w-2/5 relative -mt-10">
+                <div class="w-full md:w-2/5 relative">
                     <div class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 relative">
                         <div class="flex flex-col relative">
                             <h2 class="font-semibold">Predicted Cases by Disease</h2>
@@ -114,19 +113,19 @@
             </div>
 
             <!-- DISEASE INFORMATION -->
-            <div class="flex flex-row gap-6">
-                <div class="bg-[#252525] w-full md:w-7/12 rounded-2xl text-[#f2f2f2] px-3 py-4 mt-5">
+            <div class="flex flex-row gap-4">
+                <div class="bg-[#252525] w-full md:w-7/12 h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 mt-3">
                     <div class="flex flex-wrap gap-4">
                         <!-- Disease Risk Level Section -->
-                        <div class="rounded-lg w-full md:w-1/2 flex-1 text-center p-4 lg:h-auto relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
+                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
                             <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2">warning</span>
                             <div class="mt-10">
-                                <h2 class="font-semibold text-base lg:text-lg">Disease Risk Level</h2>
-                                <ol class="flex flex-row items-end justify-center gap-6 mt-12 lg:mt-20">
-                                    <li class="flex flex-col items-center"><span class="bg-[#28A745] w-4 h-10 lg:h-20 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Low</h5></li>
-                                    <li class="flex flex-col items-center"><span class="bg-[#FFC107] w-4 h-14 lg:h-28 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Medium</h5></li>
-                                    <li class="flex flex-col items-center"><span class="bg-[#FD7E14] w-4 h-20 lg:h-36 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">High</h5></li>
-                                    <li class="flex flex-col items-center"><span class="bg-[#DC3545] w-4 h-28 lg:h-44 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Severe</h5></li>
+                                <h2 class="font-semibold text-base">Disease Risk Level</h2>
+                                <ol class="flex flex-row items-end justify-center gap-6 mt-12">
+                                    <li class="flex flex-col items-center"><span class="bg-[#28A745] w-4 h-10 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Low</h5></li>
+                                    <li class="flex flex-col items-center"><span class="bg-[#FFC107] w-4 h-14 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Medium</h5></li>
+                                    <li class="flex flex-col items-center"><span class="bg-[#FD7E14] w-4 h-20 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">High</h5></li>
+                                    <li class="flex flex-col items-center"><span class="bg-[#DC3545] w-4 h-28 rounded-lg mb-2 opacity-75"></span><h5 class="text-xs font-semibold">Severe</h5></li>
                                 </ol>
                             </div>
                         </div>
@@ -135,9 +134,39 @@
                         <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,102,255,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
                             <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2 p-0.5">trending_up</span>
                             <div class="mt-10">
-                                <h2 class="font-semibold text-sm lg:text-lg">Total Number of Predicted Cases for Each City</h2>
-                                <h2 class="mt-10 text-6xl font-thin">8764</h2>
-                                <h5 class="text-xs mt-14 lg:text-base">Predicted <span class="font-bold">Dengue</span> cases in <span class="font-bold">Davao City</span></h5>
+                                <h2 class="font-semibold text-sm">Total Number of Predicted Cases for Each City</h2>
+                                <h2 id="totalCases" class="mt-10 text-6xl font-thin">
+                                    {% if city_totals %}
+                                        Select a City
+                                    {% else %}
+                                        No Data Available
+                                    {% endif %}
+                                </h2>
+                                <h5 class="text-xs mt-12">
+                                    Predicted 
+                                    <span class="font-bold" id="diseaseName">{{ session.get('selected_disease', 'Disease').title() }}</span> 
+                                    cases in 
+                                    <span class="font-bold" id="selectedCity">N/A</span>
+                                </h5>
+                        
+                                <!-- Dropdown Button -->
+                                <div class="relative inline-block mt-2">
+                                    {% if unique_cities %}
+                                        <span id="dropdownButtonCities" class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
+                                            <span id="dropdownSelectedValueCities" class="text-sm font-sans font-medium mb-0.5">Select a City</span>
+                                            <span class="material-symbols-outlined">arrow_drop_down</span>
+                                        </span>
+                        
+                                        <!-- Dropdown Menu -->
+                                        <div id="dropdownMenuCities" class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10">
+                                            {% for city in unique_cities %}
+                                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="{{ city }}">{{ city.title() }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <span class="text-gray-500 text-sm">No Cities Available</span>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
     
@@ -146,23 +175,23 @@
                         <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,178,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
                             <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-2 left-2 p-0.5">coronavirus</span>
                             <div class="mt-10 flex flex-col">
-                                <h2 class="font-semibold text-sm md:text-base lg:text-lg ">Monitored Diseases</h2>
-                                <div class="ml-12 lg:ml-8">
-                                    <div class="flex items-center gap-4 mt-4 lg:mt-12">
+                                <h2 class="font-semibold text-sm md:text-base">Monitored Diseases</h2>
+                                <div class="ml-12">
+                                    <div class="flex items-center gap-4 mt-4">
                                         <img src="{{ url_for('static', filename='images/mosquito.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal lg:text-lg">Dengue</h2>
+                                        <h2 class="text-sm font-normal">Dengue</h2>
                                     </div>
                                     <div class="flex items-center gap-4 mt-4">
                                         <img src="{{ url_for('static', filename='images/typhoid.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal lg:text-lg">Typhoid Fever</h2>
+                                        <h2 class="text-sm font-normal">Typhoid Fever</h2>
                                     </div>
                                     <div class="flex items-center gap-4 mt-4">
                                         <img src="{{ url_for('static', filename='images/mouse.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal lg:text-lg">Leptospirosis</h2>
+                                        <h2 class="text-sm font-normal">Leptospirosis</h2>
                                     </div>
                                     <div class="flex items-center gap-4 mt-4">
                                         <img src="{{ url_for('static', filename='images/abd.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal lg:text-lg">AB Diarrhea</h2>
+                                        <h2 class="text-sm font-normal">AB Diarrhea</h2>
                                     </div>
                                 </div>
                             </div>
@@ -206,16 +235,66 @@
                         </div>
                     </div>
                 </div>
-                
-                
+    
             </div>
-        </div>
+            </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     <script>
         const climateImpactData = {{ climate_impact|safe }};
     </script>
-    
+    <script>
+        // Handle dropdown logic only if data is available
+        // Dropdown interaction logic
+        {% if unique_cities and city_totals %}
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdownButtonCities = document.getElementById('dropdownButtonCities');
+            const dropdownMenuCities = document.getElementById('dropdownMenuCities');
+            const dropdownSelectedValueCities = document.getElementById('dropdownSelectedValueCities');
+            const selectedCitySpan = document.getElementById('selectedCity');
+            const totalCasesSpan = document.getElementById('totalCases');
+
+            // Parse city totals from template (fix JSON string issue)
+            const cityTotals = {{ city_totals | safe }};
+            console.log("Parsed City Totals (direct):", cityTotals);
+            console.log("City Totals Object (from template):", cityTotals);
+            console.log("Keys in City Totals:", Object.keys(cityTotals));
+            // Toggle dropdown menu visibility
+            dropdownButtonCities?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenuCities?.classList.toggle('hidden');
+            });
+
+            // Handle selection of a city from the dropdown
+            dropdownMenuCities?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const target = e.target.closest('[data-value]');
+                if (target) {
+                    const selectedCity = target.getAttribute('data-value');
+                    console.log("Raw data-value:", selectedCity);
+                    const cityLower = selectedCity.toLowerCase();
+                    console.log("Selected City (lowercase):", cityLower);
+                    if (cityTotals[cityLower] !== undefined) {
+                        const totalCases = cityTotals[cityLower];
+                        console.log("Total Cases:", totalCases);
+                        dropdownSelectedValueCities.innerText = target.innerText.trim();
+                        selectedCitySpan.innerText = target.innerText.trim();
+                        totalCasesSpan.innerText = totalCases || 0;
+                    } else {
+                        console.warn(`City '${cityLower}' not found in cityTotals.`);
+                    }
+                }
+                dropdownMenuCities.classList.add('hidden');
+            });            
+
+            // Hide dropdown menu when clicking outside
+            document.addEventListener('click', () => {
+                dropdownMenuCities?.classList.add('hidden');
+            });
+        });
+        {% endif %}
+
+    </script>
 </body>
 </html>
