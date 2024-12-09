@@ -31,7 +31,7 @@ let pieChart = new Chart(ctx, {
         labels: ['Average Temperature', 'Min Temperature', 'Max Temperature', 'Heat Index', 'Precipitation', 'Wind Speed', 'Humidity', 'Solar Radiation', 'UV Radiation'],
         datasets: [{
             data: initialPieData, // Default to Dengue data or any initial data
-            backgroundColor: ['#023e8a', '#c1121f', '#3a5a40', '#8338ec', '#6a040f', '#240046', '#33658a', '#0d21a1', '#d90368']
+            backgroundColor: ['#1C497C', '#C85890', '#09A4A6', '#C83D09', '#0998C8', '#C88509', '#660066', '#004c4c ', '#D90368']
         }]
     },
     options: {
@@ -48,22 +48,31 @@ let pieChart = new Chart(ctx, {
     plugins: [{
         id: 'dataLabels',
         afterDatasetsDraw: (chart) => {
-            const { ctx, data } = chart;
+            const { ctx, chartArea, data } = chart;
             const dataset = data.datasets[0];
             const total = dataset.data.reduce((sum, value) => sum + value, 0);
-
-            chart.getDatasetMeta(0).data.forEach((dataPoint, index) => {
-                const { x, y } = dataPoint.tooltipPosition();
-                const value = dataset.data[index];
+            const centerX = (chartArea.left + chartArea.right) / 2;
+            const centerY = (chartArea.top + chartArea.bottom) / 2;
+            const baseRadius = chart._metasets[0].data[0].outerRadius; // Base radius of the pie chart
+            const labelRadius = baseRadius - 30; // Adjust this value to change the label radius
+    
+            dataset.data.forEach((value, index) => {
+                const angle = chart.getDatasetMeta(0).data[index].startAngle + 
+                              (chart.getDatasetMeta(0).data[index].endAngle - chart.getDatasetMeta(0).data[index].startAngle) / 2;
                 const percentage = ((value / total) * 100).toFixed(0) + '%';
-
+    
+                // Calculate label position
+                const x = centerX + labelRadius * Math.cos(angle);
+                const y = centerY + labelRadius * Math.sin(angle);
+    
                 ctx.fillStyle = '#fff';
-                ctx.font = '14px Satoshi';
+                ctx.font = '12px Satoshi';
                 ctx.textAlign = 'center';
-                ctx.fillText(percentage, x, y + 4); // Adjust y-offset for positioning
+                ctx.fillText(percentage, x, y);
             });
         }
     }]
+    
 });
 
 let width, height, gradient;
