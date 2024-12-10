@@ -92,89 +92,89 @@ function getGradient(ctx, chartArea, colors) {
     return gradient;
 }
 
-// Define colors for each bar as RGB values
-const barColors = [
-    ['189, 189, 189', '','255, 102, 102'], // Gradient for the first bar
-    ['189, 189, 189', '','102, 178, 102'], // Gradient for the second bar
-    ['189, 189, 189','' ,'102, 102, 255'], // Gradient for the third bar
-    ['189, 189, 189','','255, 193, 7'], // Gradient for the fourth bar
-];
+// // Define colors for each bar as RGB values
+// const barColors = [
+//     ['189, 189, 189', '','255, 102, 102'], // Gradient for the first bar
+//     ['189, 189, 189', '','102, 178, 102'], // Gradient for the second bar
+//     ['189, 189, 189','' ,'102, 102, 255'], // Gradient for the third bar
+//     ['189, 189, 189','','255, 193, 7'], // Gradient for the fourth bar
+// ];
 
-const barCtx = document.getElementById('barChart').getContext('2d');
-const barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        //labels: ['Cagayan De Oro City', 'City of Mandaluyong', 'City of Muntinlupa', 'City of Navotas', 'Dagupan City', 'Davao City', 'Iloilo City', 'Legazpi City', 'Mandaue City', 'Palayan City', 'Tacloban City', 'Zamboanga City'],
-        labels: ['Dengue', 'AB Diarrhea', 'Typhoid Fever', 'Leptospirosis'],
-        datasets: [{
-            label: 'Cases',
-            data: [32, 30, 21, 16], // Example data
-            backgroundColor: function (context) {
-                const { chart, dataIndex } = context;
-                const { ctx, chartArea } = chart;
+// const barCtx = document.getElementById('barChart').getContext('2d');
+// const barChart = new Chart(barCtx, {
+//     type: 'bar',
+//     data: {
+//         //labels: ['Cagayan De Oro City', 'City of Mandaluyong', 'City of Muntinlupa', 'City of Navotas', 'Dagupan City', 'Davao City', 'Iloilo City', 'Legazpi City', 'Mandaue City', 'Palayan City', 'Tacloban City', 'Zamboanga City'],
+//         labels: ['Dengue', 'AB Diarrhea', 'Typhoid Fever', 'Leptospirosis'],
+//         datasets: [{
+//             label: 'Cases',
+//             data: [32, 30, 21, 16], // Example data
+//             backgroundColor: function (context) {
+//                 const { chart, dataIndex } = context;
+//                 const { ctx, chartArea } = chart;
 
-                if (!chartArea) {
-                    return; // Wait until chartArea is available
-                }
+//                 if (!chartArea) {
+//                     return; // Wait until chartArea is available
+//                 }
 
-                // Pass specific colors for the gradient based on index
-                return getGradient(ctx, chartArea, barColors[dataIndex]);
-            },
-            borderWidth: 1,
-            borderRadius: 15,
-            borderSkipped: false,
-        }]
-    },
-    options: {
-        responsive: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                enabled: false
-            }
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: '#F2F2F2', // Font color for X-axis labels
-                },
-                grid: {
-                    display: false // Disable grid lines for X-axis
-                }
-            },
-            y: {
-                ticks: {
-                    display: false, // Hide numerical values on Y-axis
-                },
-                grid: {
-                    display: false // Disable grid lines for Y-axis
-                }
-            }
-        }
+//                 // Pass specific colors for the gradient based on index
+//                 return getGradient(ctx, chartArea, barColors[dataIndex]);
+//             },
+//             borderWidth: 1,
+//             borderRadius: 15,
+//             borderSkipped: false,
+//         }]
+//     },
+//     options: {
+//         responsive: false,
+//         plugins: {
+//             legend: {
+//                 display: false
+//             },
+//             tooltip: {
+//                 enabled: false
+//             }
+//         },
+//         scales: {
+//             x: {
+//                 ticks: {
+//                     color: '#F2F2F2', // Font color for X-axis labels
+//                 },
+//                 grid: {
+//                     display: false // Disable grid lines for X-axis
+//                 }
+//             },
+//             y: {
+//                 ticks: {
+//                     display: false, // Hide numerical values on Y-axis
+//                 },
+//                 grid: {
+//                     display: false // Disable grid lines for Y-axis
+//                 }
+//             }
+//         }
         
-    },
+//     },
     
-    plugins: [{
-        id: 'valueOnTop',
-        afterDatasetsDraw: (chart) => {
-            const { ctx } = chart;
-            chart.data.datasets.forEach((dataset, i) => {
-                const meta = chart.getDatasetMeta(i);
-                meta.data.forEach((bar, index) => {
-                    const value = dataset.data[index];
-                    const { x, y } = bar.tooltipPosition();
+//     plugins: [{
+//         id: 'valueOnTop',
+//         afterDatasetsDraw: (chart) => {
+//             const { ctx } = chart;
+//             chart.data.datasets.forEach((dataset, i) => {
+//                 const meta = chart.getDatasetMeta(i);
+//                 meta.data.forEach((bar, index) => {
+//                     const value = dataset.data[index];
+//                     const { x, y } = bar.tooltipPosition();
 
-                    ctx.fillStyle = '#f2f2f2'; // Text color
-                    ctx.font = 'bold 12px Montserrat'; // Font style
-                    ctx.textAlign = 'center';
-                    ctx.fillText(value, x, y - 10); // Positioning the text above the bar
-                });
-            });
-        }
-    }]
-});
+//                     ctx.fillStyle = '#f2f2f2'; // Text color
+//                     ctx.font = 'bold 12px Montserrat'; // Font style
+//                     ctx.textAlign = 'center';
+//                     ctx.fillText(value, x, y - 10); // Positioning the text above the bar
+//                 });
+//             });
+//         }
+//     }]
+// });
 
 // Pie chart dropdowns
 const dropdownButton = document.getElementById('dropdownButton');
