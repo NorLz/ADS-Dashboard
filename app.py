@@ -288,33 +288,39 @@ def location():
 
         fig.update_layout(
             title=dict(
-                text=f"{session.get('selected_disease', 'Disease')} Case Predictions",
-                font=dict(size=20, color="#FFFFFF"),  # Title font size and color
+                text=f"{session.get('selected_disease', 'Disease').title()} Case Predictions",
+                font=dict(size=20, color="#F2F2F2"),  # Title font size and color
                 x=0.5  # Center the title
             ),
             xaxis=dict(
                 title="Date",
-                titlefont=dict(size=16, color="#FFFFFF"),
-                tickfont=dict(size=14, color="#FFFFFF"),
+                titlefont=dict(size=16, color="#F2F2F2"),
+                tickfont=dict(size=14, color="#F2F2F2"),
                 showgrid=False,
                 zeroline=False
             ),
             yaxis=dict(
                 title="Predicted Cases",
-                titlefont=dict(size=16, color="#FFFFFF"),
-                tickfont=dict(size=14, color="#FFFFFF"),
+                titlefont=dict(size=16, color="#F2F2F2"),
+                tickfont=dict(size=14, color="#F2F2F2"),
                 gridcolor="#444444",
                 zeroline=False
             ),
             paper_bgcolor="#191919",  # Background of the entire figure
             plot_bgcolor="#1E1E1E",  # Background of the graph
-            legend=dict(
-                title=dict(text="Cities", font=dict(size=14, color="#FFFFFF")),
-                font=dict(size=12, color="#FFFFFF"),
-                bgcolor="#1E1E1E",
-                bordercolor="#FFFFFF",
-                borderwidth=1
-            )
+            legend = dict(
+            title=dict(text="Cities", font=dict(size=14, color="#F2F2F2")),
+            font=dict(size=12, color="#F2F2F2"),
+            bgcolor="#1E1E1E",
+            bordercolor="#191919",
+            borderwidth=1,
+            orientation='h',  # Horizontal legend
+            yanchor='bottom',  # Align legend at the bottom
+            y=-0.9,  # Place the legend below the graph (adjust as needed)
+            xanchor='center',  # Center align the legend horizontally
+            x=0.5  # Position the legend at the center
+            ),
+            height=600
         )
 
         # Apply custom colors for cities if defined
