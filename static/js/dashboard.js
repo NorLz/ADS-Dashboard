@@ -9,10 +9,10 @@ const diseaseData = {
 const climateFactors = ["tave", "tmin", "tmax", "heat_index", "pr", "wind_speed", "rh", "solar_rad", "uv_rad"];
 
 const climateImpactData = {
-    'DENGUE FEVER': { tave: 13.7, tmin: 9.3, tmax: 15.4, heat_index: 8.7, pr: 6.8, wind_speed: 12.3, rh: 21.6, solar_rad: 6.1, uv_rad: 5.7 },
-    'ACUTE BLOODY DIARRHEA': { tave: 19.4, tmin: 16.7, tmax: 17.3, heat_index: 17.7, pr: 1.5, wind_speed: 9.9, rh: 13.1, solar_rad: 2.4, uv_rad: 1.6 },
-    'TYPHOID FEVER': { tave: 10.8, tmin: 6.5, tmax: 12.5, heat_index: 8.4, pr: 8.3, wind_speed: 10.3, rh: 34.0, solar_rad: 4.6, uv_rad: 4.1 },
-    'LEPTOSPIROSIS': { tave: 10.4, tmin: 6.2, tmax: 9.6, heat_index: 5.1, pr: 10.9, wind_speed: 4.0, rh: 26.8, solar_rad: 13.7, uv_rad: 12.8 }
+    'DENGUE FEVER': { tave: 16.0, tmin: 7.1, tmax: 21.7, heat_index: 12.9, pr: 8.6, wind_speed: 10.3, rh: 16.9, solar_rad: 4.1, uv_rad: 2.5 },
+    'ACUTE BLOODY DIARRHEA': { tave: 17.9, tmin: 11.0, tmax: 20.8, heat_index: 15.8, pr: 2.9, wind_speed: 10.2, rh: 12.1, solar_rad: 3.8, uv_rad: 5.4 },
+    'TYPHOID FEVER': { tave: 14.7, tmin: 8.7, tmax: 20.0, heat_index: 10.9, pr: 5.9, wind_speed: 7.1, rh: 21.1, solar_rad: 5.3, uv_rad: 6.3 },
+    'LEPTOSPIROSIS': { tave: 9.7, tmin: 8.4, tmax: 9.1, heat_index: 4.0, pr: 17.5, wind_speed: 4.2, rh: 25.4, solar_rad: 11.5, uv_rad: 10.1 }
 };
 
 
