@@ -176,7 +176,7 @@ function getGradient(ctx, chartArea, colors) {
 //     }]
 // });
 
-// pie chart dropdowns
+// Pie chart dropdowns
 const dropdownButton = document.getElementById('dropdownButton');
 const dropdownMenu = document.getElementById('dropdownMenu');
 const dropdownSelectedValue = document.getElementById('dropdownSelectedValue');
@@ -186,11 +186,23 @@ dropdownButton.addEventListener('click', () => {
     dropdownMenu.classList.toggle('hidden');
 });
 
-// Update pie chart based on selected disease
+// Update pie chart based on selected disease and close dropdown
 dropdownMenu.addEventListener('click', (event) => {
     const selectedDisease = event.target.getAttribute('data-value');
-    dropdownSelectedValue.innerText = event.target.innerText;
-    updatePieChart(selectedDisease);
+    if (selectedDisease) {
+        dropdownSelectedValue.innerText = event.target.innerText;
+        updatePieChart(selectedDisease);
+        
+        // Hide dropdown after selection
+        dropdownMenu.classList.add('hidden');
+    }
+});
+
+// Close the dropdown if clicked outside
+document.addEventListener('click', (event) => {
+    if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.classList.add('hidden');
+    }
 });
 
 function updatePieChart(disease) {
@@ -201,9 +213,51 @@ function updatePieChart(disease) {
     pieChart.update();
 }
 
-// Close the dropdown if clicked outside
-document.addEventListener('click', (event) => {
-    if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-        dropdownMenu.classList.add('hidden');
+// Elements
+const searchButton = document.getElementById('searchButton');
+const searchInput = document.getElementById('searchInput');
+const tableBody = document.getElementById('tableBody');
+const noDataMessage = document.getElementById('noDataMessage');
+
+// Toggle search input visibility
+searchButton.addEventListener('click', () => {
+    // Toggle visibility of the search input
+    searchInput.classList.toggle('hidden');
+    // Focus on the search input when it becomes visible
+    if (!searchInput.classList.contains('hidden')) {
+        searchInput.focus();
     }
 });
+
+// Search functionality
+searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const rows = tableBody.querySelectorAll('tr');
+    let found = false;  // Flag to check if any match is found
+
+    rows.forEach(row => {
+        const cityCell = row.querySelector('td:nth-child(2)');
+        const diseaseCell = row.querySelector('td:nth-child(3)');
+        const riskLevelCell = row.querySelector('td:nth-child(4)');
+
+        const cityName = cityCell ? cityCell.innerText.toLowerCase() : '';
+        const diseaseName = diseaseCell ? diseaseCell.innerText.toLowerCase() : '';
+        const riskLevelName = riskLevelCell ? riskLevelCell.innerText.toLowerCase() : '';
+
+        // Show or hide row based on match
+        if (cityName.includes(searchTerm) || diseaseName.includes(searchTerm) || riskLevelName.includes(searchTerm)) {
+            row.style.display = '';
+            found = true;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // If no rows are visible, show the "Data Unavailable" message
+    if (!found) {
+        noDataMessage.classList.remove('hidden');
+    } else {
+        noDataMessage.classList.add('hidden');
+    }
+});
+
