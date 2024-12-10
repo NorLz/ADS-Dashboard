@@ -247,8 +247,9 @@ def location():
         city_totals=city_totals
     )
 
-
-
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/info')
 def info():

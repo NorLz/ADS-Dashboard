@@ -3,17 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" />
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        {% include 'sidebar.html' %}
-        <div class="flex-grow">
-            <h1 class="text-center text-3xl mt-10">Welcome to the Dashboard</h1>
+<body class="bg-[#f2f2f2]">
+
+  <section
+  class="about-platform bg-cover bg-center text-black relative h-screen"
+  style="background-image: url('{{ url_for('static', filename='images/virus.png') }}');"
+>
+  <div class="flex h-screen">
+    {% include 'sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="flex-grow flex flex-col items-start justify-center px-10 md:px-20 py-10">
+      <div class="container mx-auto flex flex-col md:flex-row items-center justify-start">
+        <!-- Text Content -->
+        <div class="text-content max-w-lg text-center md:text-left">
+          <h2 class="text-3xl font-bold mb-4 text-[#252525]">About the Platform</h2>
+          <p class="text-[#252525] mb-6">
+            At <strong>NOSOS Alert</strong>, our mission is to provide real-time tracking of climate-sensitive diseases to help local authorities and the public understand the impact of environmental changes on public health. With the rise in climate-related health risks, such as Dengue, Typhoid Fever, Leptospirosis, and Acute Bloody Diarrhea, it’s crucial to have access to accurate, up-to-date information to act promptly.
+          </p>
+          <button
+            class="get-to-know-btn px-6 py-2 border border-black rounded hover:bg-[#191919] hover:text-white transition"
+            onclick="document.getElementById('members').scrollIntoView({ behavior: 'smooth' });"
+          >
+            Get to Know Us
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="members">
+  <div class="flex h-screen">
+    <div class="flex-grow">
+        <div class="team-section bg-[#191919] text-white py-8">
+            <h2 class="text-center text-2xl font-bold mb-5 relative after:content-[''] after:block after:h-0.5 after:w-24 after:bg-white after:mx-auto after:mt-2">
+                Meet the Team
+            </h2>
+            <p class="text-center text-sm">
+                We are 3rd-year students from the Bachelor of Science in Computer Science program at the <br> College of Information and Computing.
+                Driven by our passion for technology and its potential to improve lives, we developed this platform to track climate-sensitive diseases 
+                <!-- in the Philippines. <br> Our goal is to provide data-driven insights that empower communities and authorities to address health challenges 
+                effectively.  -->
+            </p>               
+            <div class="team-grid grid grid-cols-1 md:grid-cols-3 gap-6 px-5 md:px-20 mt-6">
+              <div class="team-member text-center">
+                <div class="member-photo flex items-center justify-center mb-3">
+                  <img
+                    src="{{ url_for('static', filename='images/PJ.jpg') }}"
+                    alt="Team Member 1"
+                    class="rounded-full w-52 h-52 object-cover"
+                  />
+                </div>
+                <h3 class="text-lg font-semibold">PJ Allen Figuracion</h3>
+                <h3 class="text-sm text-gray-400 mb-2">pacfiguracion01488@usep.edu.ph</h3>
+              </div>
+          
+              <div class="team-member text-center">
+                <div class="member-photo flex items-center justify-center mb-3">
+                  <img
+                    src="{{ url_for('static', filename='images/Norls.jpg') }}"
+                    alt="Team Member 2"
+                    class="rounded-full w-52 h-52 object-cover"
+                  />
+                </div>
+                <h3 class="text-lg font-semibold">Norlan Mendoza</h3>
+                <h3 class="text-sm text-gray-400 mb-2">nbmendoza00217@usep.edu.ph</h3>
+              </div>
+          
+              <div class="team-member text-center">
+                <div class="member-photo flex items-center justify-center mb-3">
+                  <img
+                    src="{{ url_for('static', filename='images/Yman.jpg') }}"
+                    alt="Team Member 2"
+                    class="rounded-full w-52 h-52 object-cover"
+                  />
+                </div>
+                <h3 class="text-lg font-semibold">Yman Rey Fernandez</h3>
+                <h3 class="text-sm text-gray-400 mb-2">yrmfernandez00214@usep.edu.ph</h3>
+              </div>
+            </div> 
+        </div>
+
+        <div class="flex justify-center items-center flex-col py-32 text-[#252525]">
+          <h1 class="font-bold text-3xl">
+              Join Us in Making a Difference
+          </h1>
+          <p class="text-center font-medium mt-5">
+              At NOSOS Alert, we believe that awareness is the first step toward action. Whether you're a policymaker, 
+              healthcare professional, or concerned citizen, <br> your involvement is vital in addressing the health challenges
+               posed by climate change. Together, we can build healthier, more resilient communities <br> for generations to come.
+              Our platform not only provides real-time data on climate-sensitive diseases but also equips users with tools 
+              to understand trends, predict risks, and make <br> informed decisions. By bridging the gap between environmental science and 
+              public health, we aim to empower communities to take proactive measures against emerging health threats.
+          </p>
         </div>
     </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" class="fixed bottom-8 right-8 bg-[#252525] text-white p-3 rounded-full shadow-lg hover:bg-[#3e3e3e] transition-opacity opacity-0">
+    ↑
+  </button>
+</section> 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 </body>
 </html>
