@@ -350,30 +350,32 @@ def geojson_cities():
     predictions = pd.read_json(session.get('predictions', '[]'), orient='records')
     if not predictions.empty:
         predictions['date'] = pd.to_datetime(predictions['date'])
-        latest_predictions = predictions.loc[predictions.groupby('adm3_en')['date'].idxmax()]
+        
+        # Calculate the sum of predicted cases over the forecasted period (5 weeks)
+        sum_predictions = predictions.groupby('adm3_en')['Predicted_Cases'].sum().reset_index()
 
-        # Define risk levels based on predicted cases
+        # Define risk levels based on total predicted cases
         def get_risk_level(cases):
-            if cases <= 10:
+            if cases <= 17:
                 return "low"
-            elif 10 < cases <= 30:
+            elif 17 < cases <= 34:
                 return "medium"
-            elif 30 < cases <= 50:
+            elif 34 < cases <= 66:
                 return "high"
             else:
                 return "severe"
 
         # Assign risk levels to predictions
-        latest_predictions['risk_level'] = latest_predictions['Predicted_Cases'].apply(get_risk_level)
+        sum_predictions['risk_level'] = sum_predictions['Predicted_Cases'].apply(get_risk_level)
 
         # Normalize city names in predictions
-        latest_predictions['adm3_en_normalized'] = latest_predictions['adm3_en'].map(
+        sum_predictions['adm3_en_normalized'] = sum_predictions['adm3_en'].map(
             lambda x: city_name_map.get(x, x).lower().strip()
         )
 
         # Debugging: Print city names
         print("GeoJSON city names:", [feature['properties'].get('adm3_en') for feature in geojson_data['features']])
-        print("Prediction city names:", latest_predictions['adm3_en'].unique())
+        print("Prediction city names:", sum_predictions['adm3_en'].unique())
         
         # Normalize city names in GeoJSON and match predictions
         for feature in geojson_data['features']:
@@ -381,8 +383,8 @@ def geojson_cities():
             normalized_city_name = city_name_map.get(geojson_city_name, geojson_city_name).lower()
 
             # Match GeoJSON city with normalized prediction data
-            city_data = latest_predictions[
-                latest_predictions['adm3_en_normalized'] == normalized_city_name
+            city_data = sum_predictions[
+                sum_predictions['adm3_en_normalized'] == normalized_city_name
             ]
 
             # Assign risk level to GeoJSON property
@@ -392,6 +394,7 @@ def geojson_cities():
                 feature['properties']['risk_level'] = "none"
 
     return geojson_data
+
 
 
 @app.route('/filtered-graph')
