@@ -11,9 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-[#161616]">
-    <div class="flex flex-row md:flex-row h-max ">
+    <div class="flex flex-row md:flex-row">
             {% include 'sidebar.html' %}
-        <div class="flex-grow p-6 w-full">
+        <div class="flex-grow p-5 w-full">
             <div class="text-[#f2f2f2] font-bold text-2xl">
                 <h1>Nosos Tracking Dashboard</h1>
             </div>
@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                 
-                            <canvas id="barChart" class="w-full h-60 mt-4"></canvas>
+                            <canvas id="barChart" class="w-full h-96 mt-4"></canvas>
                         </div>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
                             <div class="relative mt-4 flex justify-center items-center">
                                 {% if unique_cities %}
                                     <span id="dropdownButtonCities" class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
-                                        <span id="dropdownSelectedValueCities" class="text-sm font-serif font-medium mb-0.5">Select a City</span>
+                                        <span id="dropdownSelectedValueCities" class="text-sm font-sans font-medium mb-0.5">Select a City</span>
                                         <span class="material-symbols-outlined">arrow_drop_down</span>
                                     </span>
                 
@@ -437,7 +437,7 @@
                     }]
                 },
                 options: {
-                    responsive: true,
+                    responsive: false,
                     plugins: {
                         legend: {
                             display: false

@@ -269,9 +269,46 @@ def location():
             y='Predicted_Cases',
             color='adm3_en',
             line_dash='Type',
-            title=f"{session.get('selected_disease', 'Disease')} Case Predictions"
+            title=f"{session.get('selected_disease', 'Disease').title()} Case Predictions"
         )
-        graph_html = fig.to_html(full_html=False)
+        fig.update_layout(
+    title=dict(
+        text=f"{session.get('selected_disease', 'Disease').title()} Case Predictions",
+        font=dict(size=20, color="#F2F2F2"),  # Title font size and color
+        x=0.5  # Center the title
+    ),
+    xaxis=dict(
+        title="Date",
+        titlefont=dict(size=16, color="#F2F2F2"),
+        tickfont=dict(size=14, color="#F2F2F2"),
+        showgrid=False,
+        zeroline=False
+    ),
+    yaxis=dict(
+        title="Predicted Cases",
+        titlefont=dict(size=16, color="#F2F2F2"),
+        tickfont=dict(size=14, color="#F2F2F2"),
+        gridcolor="#444444",
+        zeroline=False
+    ),
+    paper_bgcolor="#191919",  # Background of the entire figure
+    plot_bgcolor="#1E1E1E",  # Background of the graph
+    legend=dict(
+        title=dict(text="Cities", font=dict(size=14, color="#F2F2F2")),
+        font=dict(size=12, color="#F2F2F2"),
+        bgcolor="#1E1E1E",
+        bordercolor="#191919",
+        borderwidth=1,
+        orientation='h',  # Horizontal legend
+        yanchor='bottom',  # Align legend at the bottom
+        y=-0.75,  # Adjusted margin below the graph
+        xanchor='center',  # Center align the legend horizontally
+        x=0.5  # Position the legend at the center
+    ),
+    height=600  # Set the height of the graph (adjust as needed)
+)
+
+    graph_html = fig.to_html(full_html=False, config={"displayModeBar": False})
     
     return render_template(
         'location.html',
