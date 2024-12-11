@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Mapping</title>
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
@@ -25,7 +25,7 @@
         <!-- Main Content -->
         <div class="flex-grow mb-2">
             <h2 class="font-bold text-xl text-[#F2F2F2] px-10 py-10 mt-2">Disease Cases and Risk Map</h2>
-            <div class="container -mt-14">
+            <div class=" -mt-14">
                 <div class="flex flex-wrap">
                     <!-- Right Section: Map -->
                     <div class="w-full p-4 z-10">
@@ -42,8 +42,9 @@
                                 <input type="file" id="file" name="file" class="w-1/6 p-2 border border-gray-300 rounded bg-[#2a2a2a] text-white hidden" onchange="displayFileName()">
                                 
                                 <!-- Label for file input -->
-                                <label for="file" id="file-label" class="w-1/6 px-4 py-2 bg-[#2a2a2a] text-white rounded text-center cursor-pointer hover:bg-[#3E3E3E]">Upload CSV File</label>
+                                <label for="file" id="file-label" class="w-1/6 px-4 py-2 bg-[#2a2a2a] text-white text-base rounded text-center cursor-pointer hover:bg-[#3E3E3E] font-sans4">Upload CSV File</label>
                                 
+<<<<<<< HEAD
                                 <!-- Disease selection dropdown -->
                                 <div class="relative w-1/6">
                                     <select id="disease" name="disease" class="block w-full p-2 rounded bg-[#2a2a2a] text-white appearance-none">
@@ -54,26 +55,50 @@
                                     </select>
                                     <!-- Material icon for dropdown -->
                                     <span class="material-symbols-outlined absolute right-4 top-1/2 transform -translate-y-1/2 text-white">arrow_drop_down</span>
+=======
+                                <div class="relative w-1/6" id="dropdownContainer">
+                                    <!-- Dropdown Toggle Button -->
+                                    <span
+                                        id="dropdownButton"
+                                        class="material-symbols-outlined cursor-pointer bg-[#2a2a2a] text-white flex items-center justify-between p-2 rounded w-full"
+                                    >
+                                        <span id="dropdownSelectedValue" class="text-base font-sans mb-0.5">Select a disease</span>
+                                        <span class="material-symbols-outlined">arrow_drop_down</span>
+                                    </span>
+                                
+                                    <!-- Dropdown Menu -->
+                                    <div
+                                        id="dropdownMenu"
+                                        class="absolute w-full bg-[#2a2a2a] text-white -mt-52 rounded hidden z-10"
+                                    >
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="dengue">Dengue</div>
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="abd">Acute Bloody Diarrhea</div>
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="leptos">Leptospirosis</div>
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="typhoid">Typhoid Fever</div>
+                                    </div>
+>>>>>>> 096ca970019d89e033e1cfc66e63ead11b4210f2
                                 </div>
+                                
+                                
                             </div>
                             
                             <!-- Submit button -->
                             <div class="flex justify-center">
-                                <button type="submit" class="w-1/6 px-4 py-2 bg-[#2a2a2a] text-[#F2F2F2] rounded hover:bg-[#3E3E3E]">
+                                <button type="submit" class="w-1/6 px-2 py-2 bg-[#2a2a2a] text-[#F2F2F2] rounded hover:bg-[#3E3E3E] font-sans text-base">
                                     Predict
                                 </button>
                             </div>
                         </form>
                     </div>
                     <div class="absolute top-8 right-8">
-                        <button id="show-graph" class="bg-[#2a2a2a] text-white px-4 py-2 rounded-lg hover:bg-[#3E3E3E] transition">
+                        <button id="show-graph" class="bg-[#2a2a2a] text-white px-4 py-2 rounded-lg hover:bg-[#3E3E3E] transition text-base">
                             Show Predicted Graph
                         </button>
                     </div>
                     <!-- Graph Section (Hidden by Default) -->
                     {% if graph_html %}
-                    <div id="graph-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div id="graph-container" class="relative p-5 bg-[#3e3e3e] rounded-lg w-auto">
+                    <div id="graph-overlay" class="hidden fixed h-auto inset-0 bg-[#191919] bg-opacity-50 flex items-center justify-center z-50">
+                        <div id="graph-container" class="relative p-5 h-auto bg-[#3e3e3e] rounded-lg w-auto">
                             <button id="close-graph" class="absolute top-4 right-4 bg-[#191919] text-[#F2F2F2] hover:bg-[#F2F2F2] hover:text-[#191919] transition rounded-full w-8 h-8 flex items-center justify-center">
                                 ✕
                             </button>
@@ -88,6 +113,38 @@
     </div>
     
     <!-- JavaScript -->
+    <script>
+        // Get the dropdown elements
+const dropdownButton = document.getElementById('dropdownButton');
+const dropdownMenu = document.getElementById('dropdownMenu');
+const dropdownSelectedValue = document.getElementById('dropdownSelectedValue');
+
+// Toggle dropdown visibility on button click
+dropdownButton.addEventListener('click', () => {
+    dropdownMenu.classList.toggle('hidden');
+});
+
+// Handle option selection
+dropdownMenu.addEventListener('click', (event) => {
+    if (event.target.hasAttribute('data-value')) {
+        const selectedValue = event.target.getAttribute('data-value');
+        const selectedText = event.target.textContent;
+        dropdownSelectedValue.textContent = selectedText; // Update the button text
+        dropdownMenu.classList.add('hidden'); // Close the dropdown
+        console.log('Selected disease:', selectedValue); // For debugging
+    }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (event) => {
+    if (!dropdownMenu.contains(event.target) && !dropdownButton.contains(event.target)) {
+        dropdownMenu.classList.add('hidden');
+    }
+});
+
+
+    </script>
+
     <script>
          function displayFileName() {
         const fileInput = document.getElementById('file');
