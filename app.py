@@ -257,18 +257,10 @@ def location():
         city_totals = {}
 
     
-        graph_html = ""
+    graph_html = ""
     if not forecast_predictions.empty:
         forecast_predictions['date'] = pd.to_datetime(forecast_predictions['date'])
         forecast_predictions['Type'] = 'Forecast'
-
-        # Define custom colors for cities
-        custom_colors = {
-            'city1': '#E63946',  # Replace with actual city names
-            'city2': '#F4A261',
-            'city3': '#2A9D8F',
-            'city4': '#264653',
-        }
 
         # Create the plot using only forecast data
         fig = px.line(
@@ -279,54 +271,7 @@ def location():
             line_dash='Type',
             title=f"{session.get('selected_disease', 'Disease')} Case Predictions"
         )
-
-        # Customize layout and styling
-        fig.update_traces(
-            line=dict(width=3),  # Increase line width
-            marker=dict(size=8)  # Customize marker size
-        )
-
-        fig.update_layout(
-            title=dict(
-                text=f"{session.get('selected_disease', 'Disease')} Case Predictions",
-                font=dict(size=20, color="#FFFFFF"),  # Title font size and color
-                x=0.5  # Center the title
-            ),
-            xaxis=dict(
-                title="Date",
-                titlefont=dict(size=16, color="#FFFFFF"),
-                tickfont=dict(size=14, color="#FFFFFF"),
-                showgrid=False,
-                zeroline=False
-            ),
-            yaxis=dict(
-                title="Predicted Cases",
-                titlefont=dict(size=16, color="#FFFFFF"),
-                tickfont=dict(size=14, color="#FFFFFF"),
-                gridcolor="#444444",
-                zeroline=False
-            ),
-            paper_bgcolor="#191919",  # Background of the entire figure
-            plot_bgcolor="#1E1E1E",  # Background of the graph
-            legend=dict(
-                title=dict(text="Cities", font=dict(size=14, color="#FFFFFF")),
-                font=dict(size=12, color="#FFFFFF"),
-                bgcolor="#1E1E1E",
-                bordercolor="#FFFFFF",
-                borderwidth=1
-            )
-        )
-
-        # Apply custom colors for cities if defined
-        if 'adm3_en' in custom_colors:
-            fig.for_each_trace(
-                lambda trace: trace.update(line_color=custom_colors.get(trace.name, trace.line.color))
-            )
-
-        # Convert to HTML
-        graph_html = fig.to_html(full_html=False, config={"displayModeBar": False}  )
-        
-
+        graph_html = fig.to_html(full_html=False)
     
     return render_template(
         'location.html',
@@ -334,7 +279,6 @@ def location():
         unique_cities=unique_cities,
         city_totals=city_totals
     )
-
 
 @app.route('/about')
 def about():
