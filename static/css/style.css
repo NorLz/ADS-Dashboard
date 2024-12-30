@@ -5,67 +5,86 @@
 
 /* General styles */
 body {
-    font-family: sans-serif;
-    overflow-x: hidden; 
+  font-family: sans-serif;
+  overflow-x: hidden;
 }
 
 .container {
-    display: flex;
-    transition: transform 0.5s ease-in-out; /* Smooth transition for sliding effect */
+  display: flex;
+  transition: transform 0.5s ease-in-out; /* Smooth transition for sliding effect */
 }
 
 .page {
-    width: 100vw; /* Each page takes up the full screen width */
-    flex-shrink: 0; /* Prevent pages from shrinking */
+  width: 100vw; /* Each page takes up the full screen width */
+  flex-shrink: 0; /* Prevent pages from shrinking */
 }
 
 /* Optional: Style for the active page */
 .page.active {
-    opacity: 1;
-    transform: translateX(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .page.inactive {
-    opacity: 0;
-    transform: translateX(-100%);
+  opacity: 0;
+  transform: translateX(-100%);
 }
 
 .overflow-y-auto {
-    overflow-y: auto; /* Enable vertical scrolling */
-    max-height: 18rem; /* Adjust height limit (e.g., 288px) */
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 18rem; /* Adjust height limit (e.g., 288px) */
 }
 
 /* Table styling to maintain structure */
 table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
-th, td {
-    text-align: left;
-    padding: 8px; /* Adjust padding for better readability */
+th,
+td {
+  text-align: left;
+  padding: 8px; /* Adjust padding for better readability */
 }
 
 th {
-    position: sticky; /* Keep header visible during scroll */
-    top: 0; /* Stick to the top of the container */
-    background-color: #252525; /* Match the table background */
+  position: sticky; /* Keep header visible during scroll */
+  top: 0; /* Stick to the top of the container */
+  background-color: #252525; /* Match the table background */
 }
 
 /* Custom scrollbar styling */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
-    border-radius: 8px;
+  width: 12px; /* Width of the scrollbar */
+  border-radius: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(110, 100, 100, 1); /* Track color */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+  background: rgba(110, 100, 100, 1); /* Track color */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(242, 242, 242, 1); /* Scrollbar thumb color */
-    border-radius: 8px;
+  background: rgba(242, 242, 242, 1); /* Scrollbar thumb color */
+  border-radius: 8px;
+}
+/* Spinner animation */
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3); /* Light border for background */
+  border-top: 4px solid #fff; /* White top border for animation */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1.5s linear infinite;
 }
 
+/* Define the spinning animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

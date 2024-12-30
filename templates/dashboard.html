@@ -1,524 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=swap"
+    />
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-[#161616]">
-    <div class="flex flex-row md:flex-row h-max ">
-            {% include 'sidebar.html' %}
-        <div class="flex-grow p-6 w-full">
-            <div class="text-[#f2f2f2] font-bold text-2xl">
-                <h1>Nosos Tracking Dashboard</h1>
-            </div>
+  </head>
+  <body class="bg-[#161616]">
+    <div class="flex flex-row md:flex-row h-max">
+      {% include 'sidebar.html' %}
+      <div class="flex-grow p-6 w-full">
+        <div class="text-[#f2f2f2] font-bold text-2xl">
+          <h1>Nosos Tracking Dashboard</h1>
+        </div>
 
-            <!-- WEATHER INFORMATION AND PIE CHART -->
-            <div class="flex flex-row md:flex-row gap-2 mt-2">
-                <!-- Weather Information Box -->
-                <div class= "flex flex-col bg-[#252525] w-full md:w-1/6 h-auto rounded-2xl text-[#f2f2f2] px-3 py-2">
-                    
-                    <div class="flex flex-col justify-between items-start px-1">
-                        <img src="{{ url_for('static', filename='images/Weather.png') }}" class="bg-[#252525] w-20 h-20 object-contain" alt="Weather">
-                        <div class="text-center mb-4">
-                            <h2 class="font-normal text-lg md:text-4xl">28°</h2>
-                            <h5 class="font-light text-sm">Temperature</h5>
-                        </div>
-                        <div class="text-center md:text-left mb-6">
-                            <h2 class="font-bold text-lg md:text-2xl">Philippines</h2>
-                            <h5 class="font-normal text-sm md:text-base">Davao City</h5>
-                        </div>
-                        <h2 class="font-bold text-sm md:text-base">20 November, 2024</h2>
-                    <h5 class="font-light text-xs md:text-sm">Wednesday</h5>
-                    </div>
-                </div>
-                <!-- Disease Information Pie Chart -->
-                <div class="w-full md:w-2/5 mt-4 md:mt-0 flex flex-col items-center ml-4">
-                    <div class="w-full mt-4 md:mt-0 flex flex-col items-start bg-[#252525] h-auto rounded-2xl text-[#f2f2f2] px-6 py-2">
-                        <h2 class="font-semibold ">Climatic Factors by Historical Data of Diseases</h2>
-                        <div class="relative inline-block mt-2">
-                            <!-- Dropdown Button -->
-                            <span id="dropdownButton" class="material-symbols-outlined bg-[#3E3E3E] hover:bg-[#3e3e3e] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
-                                <span id="dropdownSelectedValue" class="text-sm font-sans font-medium mb-0.5">Dengue</span>
-                                <span class="material-symbols-outlined">arrow_drop_down</span>
-                            </span>
-                        
-                            <!-- Dropdown Menu -->
-                            <div id="dropdownMenu" class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10 text-sm">
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="DENGUE FEVER">Dengue</div>
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="ACUTE BLOODY DIARRHEA">AB Diarrhea</div>
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="TYPHOID FEVER">Typhoid</div>
-                                <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="LEPTOSPIROSIS">Leptospirosis</div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-row-reverse justify-between items-center w-full gap-4">
-                            <canvas id="pieChart" class="size-56 mr-20 mb-6"></canvas>
-                            <div class="flex flex-col gap-3 text-[#f2f2f2] font-medium text-xs">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#1C497C] inline-block rounded-full"></span>
-                                    <span>Average Temperature</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#C85890] inline-block rounded-full"></span>
-                                    <span>Min Temperature</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#09A4A6] inline-block rounded-full"></span>
-                                    <span>Max Temperature</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#C83D09] inline-block rounded-full"></span>
-                                    <span>Heat Index</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#0998C8] inline-block rounded-full"></span>
-                                    <span>Precipitation</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#C88509] inline-block rounded-full"></span>
-                                    <span>Wind Speed</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#3b5998] inline-block rounded-full"></span>
-                                    <span>Humidity</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#004c4c] inline-block rounded-full"></span>
-                                    <span>Solar Radiation</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-2 h-4 bg-[#D90368] inline-block rounded-full"></span>
-                                    <span>UV Radiation</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                 
-                </div>
-                <div class="w-full md:w-2/5 relative -mt-14 ml-4">
-                    <div class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 relative">
-                        <div class="flex flex-col relative">
-                            <h2 class="font-semibold">Predicted Cases by Top Cities</h2>
-                
-                            <!-- Week Selection Dropdown -->
-                            <div class="relative inline-block mt-2 w-1/4">
-                                <span id="dropdownButtonWeeks" class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
-                                    <span id="dropdownSelectedValueWeeks" class="text-sm font-sans font-medium mb-0.5">All Weeks</span>
-                                    <span class="material-symbols-outlined">arrow_drop_down</span>
-                                </span>
-                
-                                <!-- Dropdown Menu -->
-                                <div id="dropdownMenuWeeks" class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10 w-auto">
-                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="all">All Weeks</div>
-                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="1">Week 1</div>
-                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="2">Week 2</div>
-                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="3">Week 3</div>
-                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="4">Week 4</div>
-                                    <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="5">Week 5</div>
-                                </div>
-                            </div>
-                
-                            <canvas id="barChart" class="w-full h-60 mt-4"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                
+        <!-- WEATHER INFORMATION AND PIE CHART -->
+        <div class="flex flex-row md:flex-row gap-2 mt-2">
+          <!-- Weather Information Box -->
+          <div
+            class="flex flex-col bg-[#252525] w-full md:w-1/6 h-auto rounded-2xl text-[#f2f2f2] px-3 py-2"
+          >
+            <div class="flex flex-col justify-between items-start px-1">
+              <img
+                src="{{ url_for('static', filename='images/Weather.png') }}"
+                class="bg-[#252525] w-20 h-20 object-contain"
+                alt="Weather"
+              />
+              <div class="text-center mb-4">
+                <h2 class="font-normal text-lg md:text-4xl">28°</h2>
+                <h5 class="font-light text-sm">Temperature</h5>
+              </div>
+              <div class="text-center md:text-left mb-6">
+                <h2 class="font-bold text-lg md:text-2xl">Philippines</h2>
+                <h5 class="font-normal text-sm md:text-base">Davao City</h5>
+              </div>
+              <h2 class="font-bold text-sm md:text-base">12 December, 2024</h2>
+              <h5 class="font-light text-xs md:text-sm">Thursday</h5>
             </div>
+          </div>
+          <!-- Disease Information Pie Chart -->
+          <div
+            class="w-full md:w-2/5 mt-4 md:mt-0 flex flex-col items-center ml-4"
+          >
+            <div
+              class="w-full mt-4 md:mt-0 flex flex-col items-start bg-[#252525] h-auto rounded-2xl text-[#f2f2f2] px-6 py-2"
+            >
+              <h2 class="font-semibold">
+                Climatic Factors by Historical Data of Diseases
+              </h2>
+              <div class="relative inline-block mt-2">
+                <!-- Dropdown Button -->
+                <span
+                  id="dropdownButton"
+                  class="material-symbols-outlined bg-[#3E3E3E] hover:bg-[#3e3e3e] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between"
+                >
+                  <span
+                    id="dropdownSelectedValue"
+                    class="text-sm font-sans font-medium mb-0.5"
+                    >Dengue</span
+                  >
+                  <span class="material-symbols-outlined">arrow_drop_down</span>
+                </span>
 
-            <!-- DISEASE INFORMATION -->
-            <div class="flex flex-row gap-6">
-                <div class="bg-[#252525] w-full md:w-7/12 rounded-2xl text-[#f2f2f2] px-5 py- mt-6">
-                    <div class="flex flex-wrap gap-4 mt-4">
-                        <!-- Disease Risk Level Section -->
-                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-5 relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
-                            <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-3 left-3">warning</span>
-                            <div class="mt-10">
-                                <h2 class="font-semibold text-base">Disease Risk Level</h2>
-                                <ol class="flex flex-row items-end justify-center gap-5 mt-24">
-                                    <li class="flex flex-col items-center">
-                                        <span class="bg-[#28A745] w-4 h-20 rounded-lg mb-2 opacity-75"></span>
-                                        <h5 class="text-xs font-semibold">Low</h5>
-                                    </li>
-                                    <li class="flex flex-col items-center">
-                                        <span class="bg-[#FFC107] w-4 h-28 rounded-lg mb-2 opacity-75"></span>
-                                        <h5 class="text-xs font-semibold">Medium</h5>
-                                    </li>
-                                    <li class="flex flex-col items-center">
-                                        <span class="bg-[#FD7E14] w-4 h-36 rounded-lg mb-2 opacity-75"></span>
-                                        <h5 class="text-xs font-semibold">High</h5>
-                                    </li>
-                                    <li class="flex flex-col items-center">
-                                        <span class="bg-[#DC3545] w-4 h-44 rounded-lg mb-2 opacity-75"></span>
-                                        <h5 class="text-xs font-semibold">Severe</h5>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                
-                        <!-- Total Number of Predicted Cases -->
-                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-5 relative bg-gradient-to-bl from-[rgba(102,102,255,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65% flex flex-col justify-between">
-                            <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-3 left-3 p-0.5">trending_up</span>
-                            <div>
-                                <h2 class="font-semibold text-sm mt-10">Total Number of Predicted Cases for Each City</h2>
-                                <h2 id="totalCases" class="mt-16 text-5xl font-thin">
-                                    {% if city_totals %}
-                                        Select a City
-                                    {% else %}
-                                        No Data Available
-                                    {% endif %}
-                                </h2>
-                                <h5 class="text-sm mt-2">
-                                    Predicted 
-                                    <span class="font-bold" id="diseaseName">{{ session.get('selected_disease', 'Disease').title() }}</span> 
-                                    cases in 
-                                    <span class="font-bold" id="selectedCity">N/A</span>
-                                </h5>
-                            </div>
-                
-                            <!-- Dropdown Button -->
-                            <div class="relative mt-4 flex justify-center items-center">
-                                {% if unique_cities %}
-                                    <span id="dropdownButtonCities" class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between">
-                                        <span id="dropdownSelectedValueCities" class="text-sm font-serif font-medium mb-0.5">Select a City</span>
-                                        <span class="material-symbols-outlined">arrow_drop_down</span>
-                                    </span>
-                
-                                    <!-- Dropdown Menu -->
-                                    <div id="dropdownMenuCities" class="absolute bg-[#3E3E3E] text-[#f2f2f2] text-sm rounded-lg mb-96 hidden z-10">
-                                        {% for city in unique_cities %}
-                                            <div class="cursor-pointer p-2 hover:bg-[#555]" data-value="{{ city }}">{{ city.title() }}</div>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    <span class="text-gray-500 text-sm">No Cities Available</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                
-                        <!-- Monitored Diseases -->
-                        <div class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,178,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%">
-                            <span class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-3 left-3 p-0.5">coronavirus</span>
-                            <div class="mt-10 flex flex-col">
-                                <h2 class="font-semibold text-sm md:text-base">Monitored Diseases</h2>
-                                <div class="ml-8 mt-4">
-                                    <div class="flex items-center gap-4 mt-4">
-                                        <img src="{{ url_for('static', filename='images/mosquito.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal">Dengue</h2>
-                                    </div>
-                                    <div class="flex items-center gap-4 mt-5">
-                                        <img src="{{ url_for('static', filename='images/typhoid.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal">Typhoid Fever</h2>
-                                    </div>
-                                    <div class="flex items-center gap-4 mt-6">
-                                        <img src="{{ url_for('static', filename='images/mouse.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal">Leptospirosis</h2>
-                                    </div>
-                                    <div class="flex items-center gap-4 mt-7">
-                                        <img src="{{ url_for('static', filename='images/abd.png') }}" class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain" alt="Mosquito">
-                                        <h2 class="text-sm font-normal">AB Diarrhea</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Dropdown Menu -->
+                <div
+                  id="dropdownMenu"
+                  class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10 text-sm"
+                >
+                  <div
+                    class="cursor-pointer p-2 hover:bg-[#555]"
+                    data-value="DENGUE FEVER"
+                  >
+                    Dengue
+                  </div>
+                  <div
+                    class="cursor-pointer p-2 hover:bg-[#555]"
+                    data-value="ACUTE BLOODY DIARRHEA"
+                  >
+                    AB Diarrhea
+                  </div>
+                  <div
+                    class="cursor-pointer p-2 hover:bg-[#555]"
+                    data-value="TYPHOID FEVER"
+                  >
+                    Typhoid
+                  </div>
+                  <div
+                    class="cursor-pointer p-2 hover:bg-[#555]"
+                    data-value="LEPTOSPIROSIS"
+                  >
+                    Leptospirosis
+                  </div>
                 </div>
-                
-                <!-- Historical Disease Risk Section -->
-                <div class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2]">
-                    <div class="flex flex-col">
-                        <h2 class="font-semibold text-lg mb-2 py-5 px-5">Historical Disease Risk of Each City</h2>
-                        <!-- Search Button -->
-                        <div class="absolute right-1 top-2 flex items-center gap-2">
-                            <!-- Search Input (Initially Hidden) -->
-                            <input
-                                id="searchInput"
-                                type="text"
-                                placeholder="Search city, disease, or risk..."
-                                class="text-sm bg-[#3E3E3E] text-[#f2f2f2] rounded-xl px-2 py-2 hidden"
-                            />
-                            <button
-                                id="searchButton"
-                                class="text-lg bg-[#3E3E3E] p-2 rounded-full size-10 flex items-center">
-                                <span class="material-symbols-outlined">search</span>
-                            </button>
-                        </div>
-                        <!-- Scrollable Table Container -->
-                        <div class="overflow-y-scroll max-h-96 rounded-b-2xl custom-scrollbar">
-                            <table id="dataTable" class="w-full border-separate border-spacing-y-0.5 bg-[#3A3A3A] rounded-b-2xl">
-                                <thead>
-                                    <tr class="text-left text-xs">
-                                        <th class="w-1/12 py-3 px-12 font-extralight bg-[#3A3A3A]">No.</th>
-                                        <th class="w-3/12 px-3 font-extralight bg-[#3A3A3A]">City</th>
-                                        <th class="w-4/12 px-10 font-extralight bg-[#3A3A3A]">Disease</th>
-                                        <th class="w-4/12 px-6 font-extralight bg-[#3A3A3A]">Risk Level</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableBody" class="text-sm font-medium rounded-full">
-                                    {% for row in disease_data %}
-                                    <tr class="{{ 'bg-[#4c4c4c]' if loop.index is odd else 'bg-[#3A3A3A]' }} rounded-lg">
-                                        <td class="py-4 px-12">{{ loop.index }}</td>
-                                        <td class="py-2 px-3">{{ row['City'] }}</td>
-                                        <td class="py-2 px-10">{{ row['Disease'] }}</td>
-                                        <td class="py-2 px-6 {{ 
+              </div>
+
+              <div
+                class="flex flex-row-reverse justify-between items-center w-full gap-4"
+              >
+                <canvas id="pieChart" class="size-56 mr-20 mb-6"></canvas>
+                <div
+                  class="flex flex-col gap-3 text-[#f2f2f2] font-medium text-xs"
+                >
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#1C497C] inline-block rounded-full"
+                    ></span>
+                    <span>Average Temperature</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#C85890] inline-block rounded-full"
+                    ></span>
+                    <span>Min Temperature</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#09A4A6] inline-block rounded-full"
+                    ></span>
+                    <span>Max Temperature</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#C83D09] inline-block rounded-full"
+                    ></span>
+                    <span>Heat Index</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#0998C8] inline-block rounded-full"
+                    ></span>
+                    <span>Precipitation</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#C88509] inline-block rounded-full"
+                    ></span>
+                    <span>Wind Speed</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#3b5998] inline-block rounded-full"
+                    ></span>
+                    <span>Humidity</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#004c4c] inline-block rounded-full"
+                    ></span>
+                    <span>Solar Radiation</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2 h-4 bg-[#D90368] inline-block rounded-full"
+                    ></span>
+                    <span>UV Radiation</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-2/5 relative -mt-14 ml-4">
+            <div
+              class="bg-[#252525] w-full h-auto rounded-2xl text-[#f2f2f2] px-6 py-4 relative"
+            >
+              <div class="flex flex-col relative">
+                <h2 class="font-semibold">Predicted Cases by Top Cities</h2>
+
+                <!-- Week Selection Dropdown -->
+                <div class="relative inline-block mt-2 w-1/4">
+                  <span
+                    id="dropdownButtonWeeks"
+                    class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between"
+                  >
+                    <span
+                      id="dropdownSelectedValueWeeks"
+                      class="text-sm font-sans font-medium mb-0.5"
+                      >All Weeks</span
+                    >
+                    <span class="material-symbols-outlined"
+                      >arrow_drop_down</span
+                    >
+                  </span>
+
+                  <!-- Dropdown Menu -->
+                  <div
+                    id="dropdownMenuWeeks"
+                    class="absolute bg-[#3E3E3E] text-[#f2f2f2] rounded-lg mt-2 p-2 hidden z-10 w-auto"
+                  >
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="all"
+                    >
+                      All Weeks
+                    </div>
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="1"
+                    >
+                      Week 1
+                    </div>
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="2"
+                    >
+                      Week 2
+                    </div>
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="3"
+                    >
+                      Week 3
+                    </div>
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="4"
+                    >
+                      Week 4
+                    </div>
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="5"
+                    >
+                      Week 5
+                    </div>
+                  </div>
+                </div>
+
+                <canvas id="barChart" class="w-full h-60 mt-4"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DISEASE INFORMATION -->
+        <div class="flex flex-row gap-6">
+          <div
+            class="bg-[#252525] w-full md:w-7/12 rounded-2xl text-[#f2f2f2] px-5 py- mt-6"
+          >
+            <div class="flex flex-wrap gap-4 mt-4">
+              <!-- Disease Risk Level Section -->
+              <div
+                class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-5 relative bg-gradient-to-bl from-[rgba(255,102,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%"
+              >
+                <span
+                  class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-3 left-3"
+                  >warning</span
+                >
+                <div class="mt-10">
+                  <h2 class="font-semibold text-base">Disease Risk Level</h2>
+                  <ol
+                    class="flex flex-row items-end justify-center gap-5 mt-24"
+                  >
+                    <li class="flex flex-col items-center">
+                      <span
+                        class="bg-[#28A745] w-4 h-20 rounded-lg mb-2 opacity-75"
+                      ></span>
+                      <h5 class="text-xs font-semibold">Low</h5>
+                    </li>
+                    <li class="flex flex-col items-center">
+                      <span
+                        class="bg-[#FFC107] w-4 h-28 rounded-lg mb-2 opacity-75"
+                      ></span>
+                      <h5 class="text-xs font-semibold">Medium</h5>
+                    </li>
+                    <li class="flex flex-col items-center">
+                      <span
+                        class="bg-[#FD7E14] w-4 h-36 rounded-lg mb-2 opacity-75"
+                      ></span>
+                      <h5 class="text-xs font-semibold">High</h5>
+                    </li>
+                    <li class="flex flex-col items-center">
+                      <span
+                        class="bg-[#DC3545] w-4 h-44 rounded-lg mb-2 opacity-75"
+                      ></span>
+                      <h5 class="text-xs font-semibold">Severe</h5>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- Total Number of Predicted Cases -->
+              <div
+                class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-5 relative bg-gradient-to-bl from-[rgba(102,102,255,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65% flex flex-col justify-between"
+              >
+                <span
+                  class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-3 left-3 p-0.5"
+                  >trending_up</span
+                >
+                <div>
+                  <h2 class="font-semibold text-sm mt-10">
+                    Total Number of Predicted Cases for Each City
+                  </h2>
+                  <h2 id="totalCases" class="mt-16 text-5xl font-thin">
+                    {% if city_totals %} Select a City {% else %} No Data
+                    Available {% endif %}
+                  </h2>
+                  <h5 class="text-sm mt-2">
+                    Predicted
+                    <span class="font-bold" id="diseaseName"
+                      >{{ session.get('selected_disease', 'Disease').title()
+                      }}</span
+                    >
+                    cases in
+                    <span class="font-bold" id="selectedCity">N/A</span>
+                  </h5>
+                </div>
+
+                <!-- Dropdown Button -->
+                <div class="relative mt-4 flex justify-center items-center">
+                  {% if unique_cities %}
+                  <span
+                    id="dropdownButtonCities"
+                    class="material-symbols-outlined bg-[#3E3E3E] text-[#f2f2f2] rounded-xl gap-4 px-5 py-1 cursor-pointer flex items-center justify-between"
+                  >
+                    <span
+                      id="dropdownSelectedValueCities"
+                      class="text-sm font-sans font-medium mb-0.5"
+                      >Select a City</span
+                    >
+                    <span class="material-symbols-outlined"
+                      >arrow_drop_down</span
+                    >
+                  </span>
+
+                  <!-- Dropdown Menu -->
+                  <div
+                    id="dropdownMenuCities"
+                    class="absolute bg-[#3E3E3E] text-[#f2f2f2] text-sm rounded-lg mb-96 hidden z-10"
+                  >
+                    {% for city in unique_cities %}
+                    <div
+                      class="cursor-pointer p-2 hover:bg-[#555]"
+                      data-value="{{ city }}"
+                    >
+                      {{ city.title() }}
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  <span class="text-gray-500 text-sm">No Cities Available</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Monitored Diseases -->
+              <div
+                class="rounded-lg w-full md:w-1/2 h-auto flex-1 text-center p-4 relative bg-gradient-to-bl from-[rgba(102,178,102,0.3)] from-0% to-[rgba(62,62,62,0.3)] to-65%"
+              >
+                <span
+                  class="material-symbols-outlined bg-[#252525] rounded-full text-lg size-8 absolute top-3 left-3 p-0.5"
+                  >coronavirus</span
+                >
+                <div class="mt-10 flex flex-col">
+                  <h2 class="font-semibold text-sm md:text-base">
+                    Monitored Diseases
+                  </h2>
+                  <div class="ml-8 mt-4">
+                    <div class="flex items-center gap-4 mt-4">
+                      <img
+                        src="{{ url_for('static', filename='images/mosquito.png') }}"
+                        class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain"
+                        alt="Mosquito"
+                      />
+                      <h2 class="text-sm font-normal">Dengue</h2>
+                    </div>
+                    <div class="flex items-center gap-4 mt-5">
+                      <img
+                        src="{{ url_for('static', filename='images/typhoid.png') }}"
+                        class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain"
+                        alt="Mosquito"
+                      />
+                      <h2 class="text-sm font-normal">Typhoid Fever</h2>
+                    </div>
+                    <div class="flex items-center gap-4 mt-6">
+                      <img
+                        src="{{ url_for('static', filename='images/mouse.png') }}"
+                        class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain"
+                        alt="Mosquito"
+                      />
+                      <h2 class="text-sm font-normal">Leptospirosis</h2>
+                    </div>
+                    <div class="flex items-center gap-4 mt-7">
+                      <img
+                        src="{{ url_for('static', filename='images/abd.png') }}"
+                        class="bg-[#ebe5e5] rounded-full w-9 h-9 p-1 object-contain"
+                        alt="Mosquito"
+                      />
+                      <h2 class="text-sm font-normal">AB Diarrhea</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historical Disease Risk Section -->
+          <div
+            class="bg-[#252525] h-auto w-full md:w-2/5 relative rounded-2xl text-[#f2f2f2]"
+          >
+            <div class="flex flex-col">
+              <h2 class="font-semibold text-lg mb-2 py-5 px-5">
+                Historical Disease Risk of Each City
+              </h2>
+              <!-- Search Button -->
+              <div class="absolute right-1 top-2 flex items-center gap-2">
+                <!-- Search Input (Initially Hidden) -->
+                <input
+                  id="searchInput"
+                  type="text"
+                  placeholder="Search city, disease, or risk..."
+                  class="text-sm bg-[#3E3E3E] text-[#f2f2f2] rounded-xl px-2 py-2 hidden"
+                />
+                <button
+                  id="searchButton"
+                  class="text-lg bg-[#3E3E3E] p-2 rounded-full size-10 flex items-center"
+                >
+                  <span class="material-symbols-outlined">search</span>
+                </button>
+              </div>
+              <!-- Scrollable Table Container -->
+              <div
+                class="overflow-y-scroll max-h-96 rounded-b-2xl custom-scrollbar"
+              >
+                <table
+                  id="dataTable"
+                  class="w-full border-separate border-spacing-y-0.5 bg-[#3A3A3A] rounded-b-2xl"
+                >
+                  <thead>
+                    <tr class="text-left text-xs">
+                      <th
+                        class="w-1/12 py-3 px-12 font-extralight bg-[#3A3A3A]"
+                      >
+                        No.
+                      </th>
+                      <th class="w-3/12 px-3 font-extralight bg-[#3A3A3A]">
+                        City
+                      </th>
+                      <th class="w-4/12 px-10 font-extralight bg-[#3A3A3A]">
+                        Disease
+                      </th>
+                      <th class="w-4/12 px-6 font-extralight bg-[#3A3A3A]">
+                        Risk Level
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="tableBody"
+                    class="text-sm font-medium rounded-full"
+                  >
+                    {% for row in disease_data %}
+                    <tr
+                      class="{{ 'bg-[#4c4c4c]' if loop.index is odd else 'bg-[#3A3A3A]' }} rounded-lg"
+                    >
+                      <td class="py-4 px-12">{{ loop.index }}</td>
+                      <td class="py-2 px-3">{{ row['City'] }}</td>
+                      <td class="py-2 px-10">{{ row['Disease'] }}</td>
+                      <td
+                        class="py-2 px-6 {{ 
                                             'text-[#28A745]' if row['Risk_Level'] == 'Low' else
                                             'text-[#FFC107]' if row['Risk_Level'] == 'Medium' else
                                             'text-[#FD7E14]' if row['Risk_Level'] == 'High' else
                                             'text-[#DC3545]' if row['Risk_Level'] == 'Severe' else ''
-                                        }}">
-                                            {{ row['Risk_Level'] }}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div id="noDataMessage" class="text-center text-lg text-[#f2f2f2] hidden">
-                                Data Unavailable
-                            </div>
-                        </div>
-                    </div>
+                                        }}"
+                      >
+                        {{ row['Risk_Level'] }}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div
+                  id="noDataMessage"
+                  class="text-center text-lg text-[#f2f2f2] hidden"
+                >
+                  Data Unavailable
                 </div>
-                
-                
-    
+              </div>
             </div>
-            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
     <script>
-        const climateImpactData = {{ climate_impact|safe }}
+      const climateImpactData = {{ climate_impact|safe }}
     </script>
     <script>
-        // Handle dropdown logic only if data is available
-        // Dropdown interaction logic
-        {% if unique_cities and city_totals %}
-        document.addEventListener('DOMContentLoaded', () => {
-            const dropdownButtonCities = document.getElementById('dropdownButtonCities');
-            const dropdownMenuCities = document.getElementById('dropdownMenuCities');
-            const dropdownSelectedValueCities = document.getElementById('dropdownSelectedValueCities');
-            const selectedCitySpan = document.getElementById('selectedCity');
-            const totalCasesSpan = document.getElementById('totalCases');
+      // Handle dropdown logic only if data is available
+      // Dropdown interaction logic
+      {% if unique_cities and city_totals %}
+      document.addEventListener('DOMContentLoaded', () => {
+          const dropdownButtonCities = document.getElementById('dropdownButtonCities');
+          const dropdownMenuCities = document.getElementById('dropdownMenuCities');
+          const dropdownSelectedValueCities = document.getElementById('dropdownSelectedValueCities');
+          const selectedCitySpan = document.getElementById('selectedCity');
+          const totalCasesSpan = document.getElementById('totalCases');
 
-            // Parse city totals from template (fix JSON string issue)
-            const cityTotals = {{ city_totals | safe }};
-            console.log("Parsed City Totals (direct):", cityTotals);
-            console.log("City Totals Object (from template):", cityTotals);
-            console.log("Keys in City Totals:", Object.keys(cityTotals));
-            // Toggle dropdown menu visibility
-            dropdownButtonCities?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdownMenuCities?.classList.toggle('hidden');
-            });
+          // Parse city totals from template (fix JSON string issue)
+          const cityTotals = {{ city_totals | safe }};
+          console.log("Parsed City Totals (direct):", cityTotals);
+          console.log("City Totals Object (from template):", cityTotals);
+          console.log("Keys in City Totals:", Object.keys(cityTotals));
+          // Toggle dropdown menu visibility
+          dropdownButtonCities?.addEventListener('click', (e) => {
+              e.stopPropagation();
+              dropdownMenuCities?.classList.toggle('hidden');
+          });
 
-            // Handle selection of a city from the dropdown
-            dropdownMenuCities?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const target = e.target.closest('[data-value]');
-                if (target) {
-                    const selectedCity = target.getAttribute('data-value');
-                    console.log("Raw data-value:", selectedCity);
-                    const cityLower = selectedCity.toLowerCase();
-                    console.log("Selected City (lowercase):", cityLower);
-                    if (cityTotals[cityLower] !== undefined) {
-                        const totalCases = cityTotals[cityLower];
-                        console.log("Total Cases:", totalCases);
-                        dropdownSelectedValueCities.innerText = target.innerText.trim();
-                        selectedCitySpan.innerText = target.innerText.trim();
-                        totalCasesSpan.innerText = totalCases || 0;
-                    } else {
-                        console.warn(`City '${cityLower}' not found in cityTotals.`);
-                    }
-                }
-                dropdownMenuCities.classList.add('hidden');
-            });            
+          // Handle selection of a city from the dropdown
+          dropdownMenuCities?.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const target = e.target.closest('[data-value]');
+              if (target) {
+                  const selectedCity = target.getAttribute('data-value');
+                  console.log("Raw data-value:", selectedCity);
+                  const cityLower = selectedCity.toLowerCase();
+                  console.log("Selected City (lowercase):", cityLower);
+                  if (cityTotals[cityLower] !== undefined) {
+                      const totalCases = cityTotals[cityLower];
+                      console.log("Total Cases:", totalCases);
+                      dropdownSelectedValueCities.innerText = target.innerText.trim();
+                      selectedCitySpan.innerText = target.innerText.trim();
+                      totalCasesSpan.innerText = totalCases || 0;
+                  } else {
+                      console.warn(`City '${cityLower}' not found in cityTotals.`);
+                  }
+              }
+              dropdownMenuCities.classList.add('hidden');
+          });
 
-            // Hide dropdown menu when clicking outside
-            document.addEventListener('click', () => {
-                dropdownMenuCities?.classList.add('hidden');
-            });
-        });
-        {% endif %}
+          // Hide dropdown menu when clicking outside
+          document.addEventListener('click', () => {
+              dropdownMenuCities?.classList.add('hidden');
+          });
+      });
+      {% endif %}
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Default data for an empty chart
-            let labels = [];
-            let data = [];
-        
-            // Parse the backend data
-            let topCitiesAllWeeks = {};
-            let weeklyTotals = {};
-        
-            // Check if the data exists before assigning
-            {% if top_4_cities %}
-                topCitiesAllWeeks = {{ top_4_cities|tojson }};
-            {% endif %}
-        
-            {% if weekly_totals %}
-                weeklyTotals = {{ weekly_totals|tojson }};
-            {% endif %}
-        
-            // Function to update the chart
-            const updateChart = (week) => {
-                if (week === "all") {
-                    // Use top 4 cities for all weeks
-                    labels = Object.keys(topCitiesAllWeeks).map(city => city.charAt(0).toUpperCase() + city.slice(1)); // Capitalize city names
-                    data = Object.values(topCitiesAllWeeks);
-                } else {
-                    // Match backend keys like "Week 1", "Week 2", etc.
-                    const weekKey = `Week ${week}`;
-                    
-                    if (weeklyTotals[weekKey]) {
-                        // Filter for the selected week
-                        const weeklyData = Object.entries(weeklyTotals[weekKey])
-                            .sort(([, casesA], [, casesB]) => casesB - casesA) // Sort descending by cases
-                            .slice(0, 4); // Get top 4 cities
-                        
-                        labels = weeklyData.map(([city]) => city.charAt(0).toUpperCase() + city.slice(1)); // Capitalize city names
-                        data = weeklyData.map(([, cases]) => cases);
-                    } else {
-                        // Default to empty data if the week has no data
-                        labels = [];
-                        data = [];
-                    }
-                }
-        
-                // Update the chart with new data
-                barChart.data.labels = labels;
-                barChart.data.datasets[0].data = data;
-                barChart.update();
-            };
-        
-            // Define the gradient colors for each bar
-            const barColors = [
-                ['255, 102, 102','189, 189, 189'], // Gradient for the first bar
-                ['102, 178, 102','189, 189, 189'], // Gradient for the second bar
-                ['102, 102, 255','189, 189, 189'], // Gradient for the third bar
-                ['255, 193, 7','189, 189, 189',],   // Gradient for the fourth bar
-            ];
-        
-            // Function to create gradients for bars
-            function getGradient(ctx, chartArea, colors) {
-                const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                gradient.addColorStop(0, `rgba(${colors[0]}, 0.8)`);
-                gradient.addColorStop(1, `rgba(${colors[1]}, 0.1)`); 
-                return gradient;
-            }
-        
-            // Initialize the chart
-            const barCtx = document.getElementById('barChart').getContext('2d');
-            const barChart = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Cases',
-                        data: data,
-                        backgroundColor: function (context) {
-                            const { chart, dataIndex } = context;
-                            const { ctx, chartArea } = chart;
-        
-                            if (!chartArea) {
-                                return; // Wait until chartArea is available
-                            }
-        
-                            // Pass specific colors for the gradient based on index
-                            return getGradient(ctx, chartArea, barColors[dataIndex] || ['189, 189, 189', '255, 255, 255']);
-                        },
-                        borderWidth: 1,
-                        borderRadius: 15,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: false
-                        }
-                    },
-                    layout: {
-            padding: {
-                top: 30, // Add padding to the top
-                right: 10,
-                bottom: 10,
-                left: 10
-            }
-        },
-                    scales: {
-                        x: {
-                            ticks: {
-                                color: '#F2F2F2', // X-axis label color
-                                display: true,
-                            },
-                            grid: {
-                                display: false // Hide grid lines on the X-axis
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                display: false, // Y-axis label color
-                            },
-                            grid: {
-                                display: false // Show grid lines on the Y-axis
-                            }
-                        }
-                    }
-                },
-                plugins: [{
-                    id: 'valueOnTop',
-                    afterDatasetsDraw: (chart) => {
-                        const { ctx } = chart;
-                        chart.data.datasets.forEach((dataset, i) => {
-                            const meta = chart.getDatasetMeta(i);
-                            meta.data.forEach((bar, index) => {
-                                const value = dataset.data[index];
-                                const { x, y } = bar.tooltipPosition();
-        
-                                ctx.fillStyle = '#f2f2f2'; // Text color
-                                ctx.font = 'bold 16px Montserrat'; // Font style
-                                ctx.textAlign = 'center';
-                                ctx.fillText(value, x, y - 10); // Positioning the text above the bar
-                            });
-                        });
-                    }
-                }]
-            });
-        
-            // Dropdown interaction
-            const dropdownMenu = document.getElementById('dropdownMenuWeeks');
-            const dropdownButton = document.getElementById('dropdownButtonWeeks');
-            const dropdownSelectedValue = document.getElementById('dropdownSelectedValueWeeks');
-        
-            dropdownMenu.querySelectorAll('div[data-value]').forEach(item => {
-                item.addEventListener('click', () => {
-                    const selectedValue = item.getAttribute('data-value');
-                    dropdownSelectedValue.textContent = selectedValue === "all" ? "All Weeks" : `Week ${selectedValue}`;
-                    updateChart(selectedValue); // Update the chart based on the selection
-                    dropdownMenu.classList.add('hidden'); // Hide the dropdown menu
-                });
-            });
-        
-            // Toggle dropdown visibility
-            dropdownButton.addEventListener('click', () => {
-                dropdownMenu.classList.toggle('hidden');
-            });
-        
-            // Initialize the chart with "All Weeks" data
-            updateChart("all");
-        });
-        
+      document.addEventListener('DOMContentLoaded', () => {
+          // Default data for an empty chart
+          let labels = [];
+          let data = [];
+
+          // Parse the backend data
+          let topCitiesAllWeeks = {};
+          let weeklyTotals = {};
+
+          // Check if the data exists before assigning
+          {% if top_4_cities %}
+              topCitiesAllWeeks = {{ top_4_cities|tojson }};
+          {% endif %}
+
+          {% if weekly_totals %}
+              weeklyTotals = {{ weekly_totals|tojson }};
+          {% endif %}
+
+          // Function to update the chart
+          const updateChart = (week) => {
+              if (week === "all") {
+                  // Use top 4 cities for all weeks
+                  labels = Object.keys(topCitiesAllWeeks).map(city => city.charAt(0).toUpperCase() + city.slice(1)); // Capitalize city names
+                  data = Object.values(topCitiesAllWeeks);
+              } else {
+                  // Match backend keys like "Week 1", "Week 2", etc.
+                  const weekKey = `Week ${week}`;
+
+                  if (weeklyTotals[weekKey]) {
+                      // Filter for the selected week
+                      const weeklyData = Object.entries(weeklyTotals[weekKey])
+                          .sort(([, casesA], [, casesB]) => casesB - casesA) // Sort descending by cases
+                          .slice(0, 4); // Get top 4 cities
+
+                      labels = weeklyData.map(([city]) => city.charAt(0).toUpperCase() + city.slice(1)); // Capitalize city names
+                      data = weeklyData.map(([, cases]) => cases);
+                  } else {
+                      // Default to empty data if the week has no data
+                      labels = [];
+                      data = [];
+                  }
+              }
+
+              // Update the chart with new data
+              barChart.data.labels = labels;
+              barChart.data.datasets[0].data = data;
+              barChart.update();
+          };
+
+          // Define the gradient colors for each bar
+          const barColors = [
+              ['255, 102, 102','189, 189, 189'], // Gradient for the first bar
+              ['102, 178, 102','189, 189, 189'], // Gradient for the second bar
+              ['102, 102, 255','189, 189, 189'], // Gradient for the third bar
+              ['255, 193, 7','189, 189, 189',],   // Gradient for the fourth bar
+          ];
+
+          // Function to create gradients for bars
+          function getGradient(ctx, chartArea, colors) {
+              const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+              gradient.addColorStop(0, `rgba(${colors[0]}, 0.8)`);
+              gradient.addColorStop(1, `rgba(${colors[1]}, 0.1)`);
+              return gradient;
+          }
+
+          // Initialize the chart
+          const barCtx = document.getElementById('barChart').getContext('2d');
+          const barChart = new Chart(barCtx, {
+              type: 'bar',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: 'Cases',
+                      data: data,
+                      backgroundColor: function (context) {
+                          const { chart, dataIndex } = context;
+                          const { ctx, chartArea } = chart;
+
+                          if (!chartArea) {
+                              return; // Wait until chartArea is available
+                          }
+
+                          // Pass specific colors for the gradient based on index
+                          return getGradient(ctx, chartArea, barColors[dataIndex] || ['189, 189, 189', '255, 255, 255']);
+                      },
+                      borderWidth: 1,
+                      borderRadius: 15,
+                      borderSkipped: false,
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  plugins: {
+                      legend: {
+                          display: false
+                      },
+                      tooltip: {
+                          enabled: false
+                      }
+                  },
+                  layout: {
+          padding: {
+              top: 30, // Add padding to the top
+              right: 10,
+              bottom: 10,
+              left: 10
+          }
+      },
+                  scales: {
+                      x: {
+                          ticks: {
+                              color: '#F2F2F2', // X-axis label color
+                              display: true,
+                          },
+                          grid: {
+                              display: false // Hide grid lines on the X-axis
+                          }
+                      },
+                      y: {
+                          ticks: {
+                              display: false, // Y-axis label color
+                          },
+                          grid: {
+                              display: false // Show grid lines on the Y-axis
+                          }
+                      }
+                  }
+              },
+              plugins: [{
+                  id: 'valueOnTop',
+                  afterDatasetsDraw: (chart) => {
+                      const { ctx } = chart;
+                      chart.data.datasets.forEach((dataset, i) => {
+                          const meta = chart.getDatasetMeta(i);
+                          meta.data.forEach((bar, index) => {
+                              const value = dataset.data[index];
+                              const { x, y } = bar.tooltipPosition();
+
+                              ctx.fillStyle = '#f2f2f2'; // Text color
+                              ctx.font = 'bold 16px Montserrat'; // Font style
+                              ctx.textAlign = 'center';
+                              ctx.fillText(value, x, y - 10); // Positioning the text above the bar
+                          });
+                      });
+                  }
+              }]
+          });
+
+          // Dropdown interaction
+          const dropdownMenu = document.getElementById('dropdownMenuWeeks');
+          const dropdownButton = document.getElementById('dropdownButtonWeeks');
+          const dropdownSelectedValue = document.getElementById('dropdownSelectedValueWeeks');
+
+          dropdownMenu.querySelectorAll('div[data-value]').forEach(item => {
+              item.addEventListener('click', () => {
+                  const selectedValue = item.getAttribute('data-value');
+                  dropdownSelectedValue.textContent = selectedValue === "all" ? "All Weeks" : `Week ${selectedValue}`;
+                  updateChart(selectedValue); // Update the chart based on the selection
+                  dropdownMenu.classList.add('hidden'); // Hide the dropdown menu
+              });
+          });
+
+          // Toggle dropdown visibility
+          dropdownButton.addEventListener('click', () => {
+              dropdownMenu.classList.toggle('hidden');
+          });
+
+          // Initialize the chart with "All Weeks" data
+          updateChart("all");
+      });
     </script>
-    
-    
-</body>
+  </body>
 </html>
