@@ -27,6 +27,7 @@
 
   <body class="bg-[#191919]">
     <div class="flex h-auto">
+<<<<<<< HEAD
       <!-- Sidebar -->
       {% include 'sidebar.html' %}
 
@@ -46,6 +47,97 @@
                   class="rounded-lg"
                 ></div>
               </div>
+=======
+        <!-- Sidebar -->
+        {% include 'sidebar.html' %}
+    
+        <!-- Main Content -->
+        <div class="flex-grow mb-2">
+            <h2 class="font-bold text-xl text-[#F2F2F2] px-10 py-10 mt-2">Disease Cases and Risk Map</h2>
+            <div class=" -mt-14">
+                <div class="flex flex-wrap">
+                    <!-- Right Section: Map -->
+                    <div class="w-full p-4 z-10">
+                        <div id="map-container" class="rounded-lg p-4">
+                            <div id="map" style="height: 600px; width: 100%;" class="rounded-lg"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Section: Form -->
+                    <div class="w-full p-4">
+                        <form action="/location" method="POST" enctype="multipart/form-data" class="py-0 rounded-lg">
+                            <div class="flex mb-4 space-x-4 gap-4 justify-center">
+                                <!-- Hidden file input -->
+                                <input type="file" id="file" name="file" class="w-1/6 p-2 border border-gray-300 rounded bg-[#2a2a2a] text-white hidden" onchange="displayFileName()">
+                                
+                                <!-- Label for file input -->
+                                <label for="file" id="file-label" class="w-1/6 px-4 py-2 bg-[#2a2a2a] text-white text-base rounded text-center cursor-pointer hover:bg-[#3E3E3E] font-sans4">Upload CSV File</label>
+                                
+<<<<<<< HEAD
+                                <!-- Disease selection dropdown -->
+                                <div class="relative w-1/6">
+                                    <select id="disease" name="disease" class="block w-full p-2 rounded bg-[#2a2a2a] text-white appearance-none">
+                                        <option value="dengue">Dengue</option>
+                                        <option value="acute bloody diarrhea">Acute Bloody Diarrhea</option>
+                                        <option value="leptospirosis">Leptospirosis</option>
+                                        <option value="typhoid fever">Typhoid Fever</option>
+                                    </select>
+                                    <!-- Material icon for dropdown -->
+                                    <span class="material-symbols-outlined absolute right-4 top-1/2 transform -translate-y-1/2 text-white">arrow_drop_down</span>
+=======
+                                <div class="relative w-1/6" id="dropdownContainer">
+                                    <!-- Dropdown Toggle Button -->
+                                    <span
+                                        id="dropdownButton"
+                                        class="material-symbols-outlined cursor-pointer bg-[#2a2a2a] text-white flex items-center justify-between p-2 rounded w-full"
+                                    >
+                                        <span id="dropdownSelectedValue" class="text-base font-sans mb-0.5">Select a disease</span>
+                                        <span class="material-symbols-outlined">arrow_drop_down</span>
+                                    </span>
+                                
+                                    <!-- Dropdown Menu -->
+                                    <div
+                                        id="dropdownMenu"
+                                        class="absolute w-full bg-[#2a2a2a] text-white -mt-52 rounded hidden z-10"
+                                    >
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="dengue">Dengue</div>
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="abd">Acute Bloody Diarrhea</div>
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="leptos">Leptospirosis</div>
+                                        <div class="cursor-pointer px-4 py-2 hover:bg-[#3e3e3e]" data-value="typhoid">Typhoid Fever</div>
+                                    </div>
+>>>>>>> 096ca970019d89e033e1cfc66e63ead11b4210f2
+                                </div>
+                                
+                                
+                            </div>
+                            
+                            <!-- Submit button -->
+                            <div class="flex justify-center">
+                                <button type="submit" class="w-1/6 px-2 py-2 bg-[#2a2a2a] text-[#F2F2F2] rounded hover:bg-[#3E3E3E] font-sans text-base">
+                                    Predict
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="absolute top-8 right-8">
+                        <button id="show-graph" class="bg-[#2a2a2a] text-white px-4 py-2 rounded-lg hover:bg-[#3E3E3E] transition text-base">
+                            Show Predicted Graph
+                        </button>
+                    </div>
+                    <!-- Graph Section (Hidden by Default) -->
+                    {% if graph_html %}
+                    <div id="graph-overlay" class="hidden fixed h-auto inset-0 bg-[#191919] bg-opacity-50 flex items-center justify-center z-50">
+                        <div id="graph-container" class="relative p-5 h-auto bg-[#2e2e2e] rounded-lg w-auto">
+                            <button id="close-graph" class="absolute top-4 right-4 bg-[#191919] text-[#F2F2F2] hover:bg-[#F2F2F2] hover:text-[#191919] transition rounded-full w-8 h-8 flex items-center justify-center">
+                                ✕
+                            </button>
+                            <h3 id="graph-title" class="text-xl font-semibold text-[#F2F2F2] mb-4">Predicted Disease Cases by Week</h3>
+                            {{ graph_html|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+>>>>>>> beec0bcebba32e8d455d9758bd0927b9013a03b9
             </div>
 
             <!-- Bottom Section: Form -->
@@ -312,9 +404,95 @@
                 });
               },
             }).addTo(map);
+<<<<<<< HEAD
           })
           .catch((error) => console.error("Error loading GeoJSON:", error));
       });
     </script>
   </body>
+=======
+
+            // Load GeoJSON and Render Map
+            fetch('/geojson/cities')
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        style: feature => ({
+                            fillColor: riskColors[feature.properties.risk_level || "none"],
+                            color: "none",
+                            weight: 2,
+                            fillOpacity: 0.9,
+                        }),
+                        onEachFeature: (feature, layer) => {
+                            const cityName = feature.properties.adm3_en || "Unknown";
+
+                            // Bind Popup and Handle Click
+                            layer.bindPopup(`<strong>${cityName}</strong><br>Risk Level: ${feature.properties.risk_level || "none"}`);
+                            layer.on('click', () => {
+                                // Show Graph Overlay when a city is clicked
+                                showGraphOverlay();
+                                
+                                // Example: Fetch and display graph data specific to the clicked city
+                                fetch(`/update-graph?city=${encodeURIComponent(cityName)}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Update graph with new data
+                                        Plotly.react('graph-container', data.graphData, data.layout);
+                                    })
+                                    .catch(error => console.error('Error updating graph:', error));
+                            });
+                        }
+                    }).addTo(map);
+                })
+                .catch(error => console.error('Error loading GeoJSON:', error));
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+    const predictButton = document.querySelector('button[type="submit"]');
+    const loadingModal = document.getElementById('loading-modal');
+
+    // Handle form submission
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Show the loading modal
+        loadingModal.classList.remove('hidden');
+
+        // Send the form data via Fetch API
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json()) // Adjust this if your response is not JSON
+            .then(data => {
+                // Hide the loading modal after receiving the response
+                loadingModal.classList.add('hidden');
+
+                // Handle success response (e.g., update the UI or show results)
+                console.log('Prediction completed:', data);
+            })
+            .catch(error => {
+                // Hide the loading modal and handle errors
+                loadingModal.classList.add('hidden');
+                console.error('Error during prediction:', error);
+                alert('An error occurred. Please try again.');
+            });
+    });
+});
+
+
+    </script>
+    <!-- Loading Modal -->
+<div id="loading-modal" class="hidden fixed inset-0 bg-[#00000080] flex items-center justify-center z-50">
+    <div class="flex flex-col items-center justify-center bg-[#2e2e2e] text-white rounded-lg p-6">
+        <div class="loader mb-4 border-t-4 border-b-4 border-white rounded-full w-12 h-12 animate-spin"></div>
+        <p class="text-lg font-semibold">Processing your prediction...</p>
+    </div>
+</div>
+
+</body>
+
+>>>>>>> beec0bcebba32e8d455d9758bd0927b9013a03b9
 </html>

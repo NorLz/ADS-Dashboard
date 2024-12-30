@@ -272,7 +272,7 @@ def location():
             y='Predicted_Cases',
             color='adm3_en',
             line_dash='Type',
-            title=f"{session.get('selected_disease', 'Disease')} Case Predictions"
+            title=f"{session.get('selected_disease', 'Disease').title()} Case Predictions"
         )
         fig.update_layout(
     title=dict(

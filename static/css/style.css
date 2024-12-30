@@ -79,6 +79,7 @@ th {
   animation: spin 1.5s linear infinite;
 }
 
+<<<<<<< HEAD
 /* Define the spinning animation */
 @keyframes spin {
   0% {
@@ -88,3 +89,19 @@ th {
     transform: rotate(360deg);
   }
 }
+=======
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+     border-radius: 50%;
+     border-top-color: #fff;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+to {
+    transform: rotate(360deg);
+    }
+}
+>>>>>>> beec0bcebba32e8d455d9758bd0927b9013a03b9
